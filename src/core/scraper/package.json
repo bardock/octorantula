@@ -1,0 +1,16 @@
+{
+  "name": "scraper",
+  "version": "0.0.0",
+  "description": "scraper",
+  "main": "app.js",
+  "author": {
+    "name": "bardock",
+    "email": ""
+  },
+  "dependencies": {
+    "async": "^0.9.0",
+    "cheerio": "^0.18.0",
+    "request": "^2.51.0",
+    "util": "^0.10.3"
+  }
+}
