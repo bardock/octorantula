@@ -2,9 +2,9 @@
 
 import should = require('should');
 import fs = require('fs');
-import _Scraper = require('../Scraper');
+import ScraperModule = require('../Scraper');
 
-var scraper = new _Scraper.Scraper();
+var scraper = new ScraperModule.Scraper();
 
 describe("parseList", () => {
 

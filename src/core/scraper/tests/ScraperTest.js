@@ -1,8 +1,8 @@
 /// <reference path="../typings/should/should.d.ts" />
 var should = require('should');
 var fs = require('fs');
-var _Scraper = require('../Scraper');
-var scraper = new _Scraper.Scraper();
+var ScraperModule = require('../Scraper');
+var scraper = new ScraperModule.Scraper();
 describe("parseList", function () {
     it("20 items", function (done) {
         fs.readFile('yify-list.html', 'utf8', function (err, html) {

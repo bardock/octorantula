@@ -6,7 +6,7 @@
     <ProjectGuid>{6efea34f-8fc9-4518-8a3d-38b1cf88c981}</ProjectGuid>
     <ProjectHome />
     <ProjectView>ShowAllFiles</ProjectView>
-    <StartupFile>app.js</StartupFile>
+    <StartupFile>app.ts</StartupFile>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
@@ -23,10 +23,10 @@
     <Content Include="README.min.html" />
     <Content Include="package.json" />
     <Content Include="README.md" />
-    <Compile Include="app.js" />
     <Content Include="tests\yify-list.html" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="Scraper.ts" />
     <TypeScriptCompile Include="tests\ScraperTest.ts">
       <SubType>Code</SubType>
