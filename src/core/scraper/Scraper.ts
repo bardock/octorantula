@@ -1,41 +1,47 @@
-﻿/// <reference path="typings/cheerio/cheerio.d.ts" />
+﻿/// <reference path="typings/request/request.d.ts" />
+/// <reference path="typings/cheerio/cheerio.d.ts" />
 
+import request = require('request');
 import cheerio = require('cheerio');
 
 export class Scraper {
 
-    scrape(body: string) {
+    scrapeList(url: string, callback: (Error?, any?) => void) {
+        request(url, (err, response, body) => {
+            if (err) callback(err);
+            callback(null, this.parseList(body));
+        });
+    }
+
+    parseList(body: string) {
 
         var $ = cheerio.load(body);
 
         var movies = [];
 
-        $('.browse-content').each(function () {
-            var $link = $(this).find("span.browseTitleLink a");
-            var quality = $(this).find(".browseInfoList :contains(Quality:)").parent().contents().eq(1).text().trim();
+        $('.browse-movie-wrap').each(function () {
+            var $link = $(this).find("a.browse-movie-title");
             var movie = {
-                name: $link.text().replace(quality, "").trim(),
-                size: $(this).find(".browseInfoList :contains(Size:)").parent().contents().eq(1).text().trim(),
-                genres: $(this).find(".browseInfoList :contains(Genre:)").parent().contents().eq(1).text().trim().split(/[\s|,]+/),
-                ratings: {
-                    imdb: parseFloat($(this).find(".browseInfoList :contains(IMDB Rating:)").parent().contents().eq(1).text().trim())
+                name: $link.text(),
+                year: parseInt($(this).find(".browse-movie-year").text()),
+                genres: $(this).find("figcaption h4:not(.rating)").map((i, x) => $(x).text()).toArray(),
+                rating: {
+                    imdb: parseFloat($(this).find(".rating").text())
                 },
-                downloads: {
-                    yify: {
-                        source: $link.attr("href"),
-                        torrent: $(this).find(".torrentDwl").attr("href"),
-                        quality: quality,
-                        peers: $(this).find(".peers").contents().eq(1).text().trim(),
-                        seeds: $(this).find(".seeds").contents().eq(1).text().trim()
-                    }
-                }
+                downloads: []
             };
+            $(this).find(".browse-movie-tags a").each((i, elem) => movie.downloads.push({
+                ripper: "yify",
+                source: $link.attr("href"),
+                torrent: $(elem).attr("href"),
+                quality: $(elem).text(),
+            }));
             movies.push(movie);
         });
 
         return {
             movies: movies,
-            nextUrl: $('.pagination a:contains(Next)').attr("href")
+            nextUrl: $('.tsc_pagination a:contains(Next)').attr("href")
         }
     }
 }

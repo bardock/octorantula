@@ -1,0 +1,808 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!--[if IE]>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, minimal-ui, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="description" content="Search Browse For Any YIFY Movie Downloads at YTS. Thousands of films in small file size" />
+    <meta name="keywords" content="torrents, yify, yts, movies, movie, download, 720p, 1080p, 3D, browse movies, yify-torrents, yts" />
+    <meta property="og:title" content="YTS - Search and Browse YIFY Movie Torrent Downloads" />
+    <meta property="og:image" content="https://s.ynet.io/assets/images/website/og_yts_logo.png" />
+    <meta property="og:description" content="Search Browse For Any YIFY Movie Downloads at YTS. Thousands of films in small file size" />
+    <meta property="og:url" content="http://yts.re/browse-movie/0/All/All/0/latest" />
+    <title>Search and Browse YIFY Movie Torrent Downloads - YTS</title>
+
+    <!--[if IE]>
+            <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <![endif]-->
+
+    <link rel="shortcut icon" href="https://s.ynet.io/assets/images/website/favicon.ico">
+    <link rel="apple-touch-icon" sizes="57x57" href="https://s.ynet.io/assets/images/website/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="https://s.ynet.io/assets/images/website/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="https://s.ynet.io/assets/images/website/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="https://s.ynet.io/assets/images/website/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="https://s.ynet.io/assets/images/website/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="https://s.ynet.io/assets/images/website/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="https://s.ynet.io/assets/images/website/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="https://s.ynet.io/assets/images/website/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://s.ynet.io/assets/images/website/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="https://s.ynet.io/assets/images/website/favicon-160x160.png" sizes="160x160">
+    <link rel="icon" type="image/png" href="https://s.ynet.io/assets/images/website/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="https://s.ynet.io/assets/images/website/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="https://s.ynet.io/assets/images/website/favicon-32x32.png" sizes="32x32">
+    <meta name="msapplication-TileColor" content="#00a300">
+    <meta name="msapplication-TileImage" content="https://s.ynet.io/assets/images/website/mstile-144x144.png">
+    <meta name="msapplication-config" content="https://s.ynet.io/assets/images/website/browserconfig.xml">
+
+    <link rel="search" type="application/opensearchdescription+xml" href="/opensearch" title="YTS - The Official Home of YIFY Movie Torrent Downloads" />
+    <link href='//fonts.googleapis.com/css?family=Arimo:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://yts.re/assets/fonts/fonts.css">
+    <link rel="stylesheet" href="https://yts.re/assets/minified/a8f5c7f0e8228aff0f41d07a823bae96.css">
+</head>
+<body class="non-touch  bg-black ">
+    <header class="nav-bar">
+        <div class="nav-logo pull-left">
+            <a href="https://yts.re">
+                <img src="https://s.ynet.io/assets/images/website/logo-YTS.svg" alt="" />
+            </a>
+        </div>
+        <span class="header-slogan hidden-xs pull-left">HD movies at the smallest file size.</span>
+        <div class="main-nav-links hidden-sm hidden-xs">
+
+            <form method="GET" action="#" accept-charset="UTF-8" id="quick-search" name="quick-search">
+                <div id="quick-search-container">
+                    <input id="quick-search-input" name="query" autocomplete="off" type="search" value="Search for a movie&hellip;">
+                    <div class="ajax-spinner"></div>
+                </div>
+            </form>
+
+            <ul class="nav-links">
+                <li>
+                    <a href="https://yts.re">
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a href="https://yts.re/browse-movies">
+                        Browse Movies
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav-links nav-link-guest">
+                <li>
+                    <a class="login-nav-btn" href="#">
+                        Login
+                    </a>
+                    &nbsp;|&nbsp;
+                    <a class="register-nav-btn" href="#">
+                        Register
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="nav-mobile-buttons hidden-md hidden-lg">
+            <a class="touchable" id="mobile-search-btn" href="#">
+                <span class="glyphicon glyphicon-search"></span>
+            </a>
+            <a class="touchable" href="https://yts.re/browse-movies">
+                <span class="glyphicon glyphicon-list-alt"></span>
+            </a>
+            <a class="touchable" href="https://yts.re/login">
+                <span class="glyphicon glyphicon-user"></span>
+            </a>
+        </div>
+    </header>
+
+
+    <div class="modal modal-auth hidden-xs hidden-sm">
+        <div class="modal-container">
+            <div class="modal-switcher">
+                <span id="modal-login">
+                    Login
+                </span>
+                <span id="modal-register">
+                    Register
+                </span>
+            </div>
+            <div class="modal-content">
+                <div class="modal-login-content">
+                    <form method="POST" action="https://yts.re/browse-movie/0/All/All/0/latest" accept-charset="UTF-8" autocorrect="off" autocapitalize="off" spellcheck="off">
+                        <input name="_token" type="hidden" value="5NSMa89ECwktYRGx9ZTxjQDbZMkz5YIZ0Y6WnsE1">
+                        <span class="error-msg"></span>
+                        <div class="inner-addon">
+                            <span class="glyphicon glyphicon-user"></span>
+                            <input placeholder="Username or Email" autocorrect="off" autocapitalize="off" spellcheck="off" name="username" type="text">
+                        </div>
+                        <div class="inner-addon">
+                            <span class="glyphicon glyphicon-lock"></span>
+                            <input placeholder="Password" autocorrect="off" autocapitalize="off" spellcheck="off" name="password" type="password" value="">
+                        </div>
+                        <button class="button-green-download-big" type="button">Login</button>
+                    </form>
+                    <p class="bottom-msg">
+                        <a class="forgotpassword-nav-btn" href="#">Forgot your password?</a>
+                    </p>
+                </div>
+                <div class="modal-register-content">
+                    <form method="POST" action="https://yts.re/browse-movie/0/All/All/0/latest" accept-charset="UTF-8" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="off">
+                        <input name="_token" type="hidden" value="5NSMa89ECwktYRGx9ZTxjQDbZMkz5YIZ0Y6WnsE1">
+                        <span class="error-msg"></span>
+                        <div class="inner-addon">
+                            <span class="glyphicon glyphicon-user"></span>
+                            <input placeholder="Username" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="off" name="username" type="text">
+                        </div>
+                        <div class="inner-addon">
+                            <span class="glyphicon glyphicon-envelope"></span>
+                            <input placeholder="E-Mail" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="off" name="email" type="email">
+                        </div>
+                        <div class="inner-addon">
+                            <span class="glyphicon glyphicon-lock"></span>
+                            <input placeholder="Password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="off" name="password" type="password" value="">
+                        </div>
+                        <div class="inner-addon">
+                            <span class="glyphicon glyphicon-lock"></span>
+                            <input placeholder="Confirm Password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="off" name="password_confirmation" type="password" value="">
+                        </div>
+                        <button class="button-green-download-big" type="button">Register</button>
+                    </form>
+                </div>
+                <div class="modal-forgotpass-content">
+                    <form method="POST" action="https://yts.re/browse-movie/0/All/All/0/latest" accept-charset="UTF-8" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="off">
+                        <input name="_token" type="hidden" value="5NSMa89ECwktYRGx9ZTxjQDbZMkz5YIZ0Y6WnsE1">
+                        <span class="error-msg"></span>
+                        <p class="info-msg">
+                            If you have Forgotten your password, just type in your Email and we will send you a link to Reset your password.
+                        </p>
+                        <div class="inner-addon">
+                            <span class="glyphicon glyphicon-envelope"></span>
+                            <input placeholder="E-Mail" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="off" name="email" type="email">
+                        </div>
+                        <button class="button-green-download-big" type="button">Reset Password</button>
+                    </form>
+                    <p class="bottom-msg">
+                        <a class="login-nav-btn" href="#">Back to login</a>
+                    </p>
+                </div>
+                <div class="modal-loading-content">
+                    <img src="https://s.ynet.io/assets/images/website/ajax-spinner.gif" alt="ajax spinner loading" />
+                    <p class="info-msg">
+                        Loading, please wait
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main-content">
+
+
+
+        <div id="mobile-search-input" class="hidden-md hidden-lg">
+            <form method="POST" action="https://yts.re/search-movies" accept-charset="UTF-8">
+                <input name="_token" type="hidden" value="5NSMa89ECwktYRGx9ZTxjQDbZMkz5YIZ0Y6WnsE1">
+                <div class="input-group container">
+                    <input class="form-control" placeholder="Search for a movie&hellip;" autocorrect="off" autocomplete="off" name="keyword" type="search">
+                    <span class="input-group-btn">
+                        <button class="btn btn-success" type="submit">Search</button>
+                    </span>
+                </div>
+            </form>
+        </div>
+
+        <div class="ac-results hidden-sm hidden-xs">
+            <ul></ul>
+        </div>
+
+        <div id="main-search" class="content-dark hidden-sm hidden-xs">
+            <div class="container">
+                <form method="POST" action="https://yts.re/search-movies" accept-charset="UTF-8">
+                    <input name="_token" type="hidden" value="5NSMa89ECwktYRGx9ZTxjQDbZMkz5YIZ0Y6WnsE1">
+
+                    <div id="main-search-fields">
+                        <p class="pull-left term">Search Term:</p>
+                        <input name="keyword" autocomplete="off" type="search">
+
+                        <div class="selects-container">
+                            <p>Quality:</p>
+                            <select name="quality"><option value="all" selected="selected">All</option><option value="720p">720p</option><option value="1080p">1080p</option><option value="3d">3D</option></select>
+                        </div>
+                        <div class="selects-container">
+                            <p>Genre:</p>
+                            <select name="genre"><option value="all" selected="selected">All</option><option value="action">Action</option><option value="adventure">Adventure</option><option value="animation">Animation</option><option value="biography">Biography</option><option value="comedy">Comedy</option><option value="crime">Crime</option><option value="documentary">Documentary</option><option value="drama">Drama</option><option value="family">Family</option><option value="fantasy">Fantasy</option><option value="filmnoir">Film-Noir</option><option value="history">History</option><option value="horror">Horror</option><option value="music">Music</option><option value="musical">Musical</option><option value="mystery">Mystery</option><option value="news">News</option><option value="romance">Romance</option><option value="scifi">Sci-Fi</option><option value="short">Short</option><option value="sport">Sport</option><option value="thriller">Thriller</option><option value="war">War</option><option value="western">Western</option></select>
+                        </div>
+                        <div class="selects-container">
+                            <p>Rating:</p>
+                            <select name="rating"><option value="0" selected="selected">All</option><option value="9">9+</option><option value="8">8+</option><option value="7">7+</option><option value="6">6+</option><option value="5">5+</option><option value="4">4+</option><option value="3">3+</option><option value="2">2+</option><option value="1">1+</option></select>
+                        </div>
+                        <div class="selects-container selects-container-last">
+                            <p>Order By:</p>
+                            <select name="order_by"><option value="latest" selected="selected">Latest</option><option value="oldest">Oldest</option><option value="seeds">Seeds</option><option value="peers">Peers</option><option value="year">Year</option><option value="rating">Rating</option><option value="likes">Likes</option><option value="alphabetical">Alphabetical</option><option value="downloads">Downloads</option></select>
+                        </div>
+                    </div>
+
+                    <div id="main-search-btn">
+                        <input class="button-green-download-big" type="submit" value="Search">
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        <div class="browse-content">
+            <div class="container">
+                <h2>3,672 Movies Found</h2>
+                <div class="hidden-sm hidden-xs">
+                    <ul class="tsc_pagination tsc_paginationA tsc_paginationA06">
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=1">&laquo; First</a></li>
+
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=7">&laquo; Previous</a></li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=1">1</a></li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=2">2</a></li>
+                        <li class="unavailable">...</li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=5">5</a></li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=6">6</a></li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=7">7</a></li>
+                        <li><a href="#" class="current">8</a></li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=9">9</a></li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=10">10</a></li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=11">11</a></li>
+                        <li class="unavailable">...</li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=183">183</a></li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=184">184</a></li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=9">Next &raquo;</a></li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=184">Last &raquo;</a></li>
+                    </ul>
+                </div>
+                <div class="hidden-md hidden-lg">
+                    <ul class="tsc_pagination tsc_paginationA tsc_paginationA06">
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=7">&laquo; Previous</a></li>
+                        <li class="pagination-bordered">8 of 184</li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=9">Next &raquo;</a></li>
+                    </ul>
+                </div>
+
+                <section>
+                    <div class="row">
+                        <div class="browse-movie-wrap col-xs-10 col-sm-4 col-md-5 col-lg-4">
+                            <a href="https://yts.re/movie/man-hunt-1941" class="browse-movie-link">
+                                <figure>
+                                    <img class="img-responsive" src="https://s.ynet.io/assets/images/movies/Man_Hunt_1941/medium-cover.jpg" alt="Man Hunt (1941) download" />
+                                    <figcaption class="hidden-xs hidden-sm">
+                                        <span class="icon-star"></span>
+                                        <h4 class="rating">7.4 / 10</h4>
+                                        <h4>Drama</h4>
+                                        <h4>Thriller</h4>
+                                        <span class="button-green-download-big">View Details</span>
+                                    </figcaption>
+                                </figure>
+                            </a>
+                            <div class="browse-movie-bottom">
+                                <a href="https://yts.re/movie/man-hunt-1941" class="browse-movie-title">Man Hunt</a>
+                                <div class="browse-movie-year">1941</div>
+                                <div class="browse-movie-tags">
+                                    <a href="https://yts.re/torrent/download/EC70141F8005A5123CEFDFE273AB033FDE177533.torrent">1080p</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="browse-movie-wrap col-xs-10 col-sm-4 col-md-5 col-lg-4">
+                            <a href="https://yts.re/movie/hellion-2014" class="browse-movie-link">
+                                <figure>
+                                    <img class="img-responsive" src="https://s.ynet.io/assets/images/movies/Hellion_2014/medium-cover.jpg" alt="Hellion (2014) download" />
+                                    <figcaption class="hidden-xs hidden-sm">
+                                        <span class="icon-star"></span>
+                                        <h4 class="rating">6.3 / 10</h4>
+                                        <h4>Drama</h4>
+                                        <h4>Thriller</h4>
+                                        <span class="button-green-download-big">View Details</span>
+                                    </figcaption>
+                                </figure>
+                            </a>
+                            <div class="browse-movie-bottom">
+                                <a href="https://yts.re/movie/hellion-2014" class="browse-movie-title">Hellion</a>
+                                <div class="browse-movie-year">2014</div>
+                                <div class="browse-movie-tags">
+                                    <a href="https://yts.re/torrent/download/3C1EF5D159F69435F53AF7D0C395422D6D0FCFA3.torrent">720p</a>
+                                    <a href="https://yts.re/torrent/download/06ED4E4659AE361B160F280C1CAF82C9E9FFA682.torrent">1080p</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="browse-movie-wrap col-xs-10 col-sm-4 col-md-5 col-lg-4">
+                            <a href="https://yts.re/movie/the-signal-2014" class="browse-movie-link">
+                                <figure>
+                                    <img class="img-responsive" src="https://s.ynet.io/assets/images/movies/The_Signal_2014/medium-cover.jpg" alt="The Signal (2014) download" />
+                                    <figcaption class="hidden-xs hidden-sm">
+                                        <span class="icon-star"></span>
+                                        <h4 class="rating">6.2 / 10</h4>
+                                        <h4>Sci-Fi</h4>
+                                        <h4>Thriller</h4>
+                                        <span class="button-green-download-big">View Details</span>
+                                    </figcaption>
+                                </figure>
+                            </a>
+                            <div class="browse-movie-bottom">
+                                <a href="https://yts.re/movie/the-signal-2014" class="browse-movie-title">The Signal</a>
+                                <div class="browse-movie-year">2014</div>
+                                <div class="browse-movie-tags">
+                                    <a href="https://yts.re/torrent/download/BBD7B865BC14E44C26DA4EB6CEE9343DE3032E1D.torrent">1080p</a>
+                                    <a href="https://yts.re/torrent/download/482E6B46CD9D48BA711CB577E1342D6CF3D2FA4F.torrent">720p</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="browse-movie-wrap col-xs-10 col-sm-4 col-md-5 col-lg-4">
+                            <a href="https://yts.re/movie/canopy-2013" class="browse-movie-link">
+                                <figure>
+                                    <img class="img-responsive" src="https://s.ynet.io/assets/images/movies/Canopy_2013/medium-cover.jpg" alt="Canopy (2013) download" />
+                                    <figcaption class="hidden-xs hidden-sm">
+                                        <span class="icon-star"></span>
+                                        <h4 class="rating">5.0 / 10</h4>
+                                        <h4>Adventure</h4>
+                                        <h4>Drama</h4>
+                                        <span class="button-green-download-big">View Details</span>
+                                    </figcaption>
+                                </figure>
+                            </a>
+                            <div class="browse-movie-bottom">
+                                <a href="https://yts.re/movie/canopy-2013" class="browse-movie-title">Canopy</a>
+                                <div class="browse-movie-year">2013</div>
+                                <div class="browse-movie-tags">
+                                    <a href="https://yts.re/torrent/download/F3C11F98ACAA57B673865C1B833C3F0E88E8C2DA.torrent">720p</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="browse-movie-wrap col-xs-10 col-sm-4 col-md-5 col-lg-4">
+                            <a href="https://yts.re/movie/the-emerald-forest-1985" class="browse-movie-link">
+                                <figure>
+                                    <img class="img-responsive" src="https://s.ynet.io/assets/images/movies/The_Emerald_Forest_1985/medium-cover.jpg" alt="The Emerald Forest (1985) download" />
+                                    <figcaption class="hidden-xs hidden-sm">
+                                        <span class="icon-star"></span>
+                                        <h4 class="rating">6.9 / 10</h4>
+                                        <h4>Action</h4>
+                                        <h4>Adventure</h4>
+                                        <span class="button-green-download-big">View Details</span>
+                                    </figcaption>
+                                </figure>
+                            </a>
+                            <div class="browse-movie-bottom">
+                                <a href="https://yts.re/movie/the-emerald-forest-1985" class="browse-movie-title">The Emerald Forest</a>
+                                <div class="browse-movie-year">1985</div>
+                                <div class="browse-movie-tags">
+                                    <a href="https://yts.re/torrent/download/2822D69B2D7EFB92BD6264130D7297E1DF5C7A7C.torrent">720p</a>
+                                    <a href="https://yts.re/torrent/download/F47032D9CB490C02D3607BE6E1DAA52EBAC22983.torrent">1080p</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="browse-movie-wrap col-xs-10 col-sm-4 col-md-5 col-lg-4">
+                            <a href="https://yts.re/movie/menace-ii-society-1993" class="browse-movie-link">
+                                <figure>
+                                    <img class="img-responsive" src="https://s.ynet.io/assets/images/movies/Menace_II_Society_1993/medium-cover.jpg" alt="Menace II Society (1993) download" />
+                                    <figcaption class="hidden-xs hidden-sm">
+                                        <span class="icon-star"></span>
+                                        <h4 class="rating">7.5 / 10</h4>
+                                        <h4>Crime</h4>
+                                        <h4>Drama</h4>
+                                        <span class="button-green-download-big">View Details</span>
+                                    </figcaption>
+                                </figure>
+                            </a>
+                            <div class="browse-movie-bottom">
+                                <a href="https://yts.re/movie/menace-ii-society-1993" class="browse-movie-title">Menace II Society</a>
+                                <div class="browse-movie-year">1993</div>
+                                <div class="browse-movie-tags">
+                                    <a href="https://yts.re/torrent/download/0E3448BFDC802CA3667B33DF698FA066D82E7E15.torrent">1080p</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="browse-movie-wrap col-xs-10 col-sm-4 col-md-5 col-lg-4">
+                            <a href="https://yts.re/movie/mickey-donald-goofy-the-three-musketeers-2004" class="browse-movie-link">
+                                <figure>
+                                    <img class="img-responsive" src="https://s.ynet.io/assets/images/movies/Mickey_Donald_Goofy_The_Three_Musketeers_2004/medium-cover.jpg" alt="Mickey, Donald, Goofy: The Three Musketeers (2004) download" />
+                                    <figcaption class="hidden-xs hidden-sm">
+                                        <span class="icon-star"></span>
+                                        <h4 class="rating">6.4 / 10</h4>
+                                        <h4>Animation</h4>
+                                        <h4>Adventure</h4>
+                                        <span class="button-green-download-big">View Details</span>
+                                    </figcaption>
+                                </figure>
+                            </a>
+                            <div class="browse-movie-bottom">
+                                <a href="https://yts.re/movie/mickey-donald-goofy-the-three-musketeers-2004" class="browse-movie-title">Mickey, Donald, Goofy: The Three Musketeers</a>
+                                <div class="browse-movie-year">2004</div>
+                                <div class="browse-movie-tags">
+                                    <a href="https://yts.re/torrent/download/147FB970C238B0EA6F5F803F2CC4FC8126361C8F.torrent">720p</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="browse-movie-wrap col-xs-10 col-sm-4 col-md-5 col-lg-4">
+                            <a href="https://yts.re/movie/the-guest-2014" class="browse-movie-link">
+                                <figure>
+                                    <img class="img-responsive" src="https://s.ynet.io/assets/images/movies/The_Guest_2014/medium-cover.jpg" alt="The Guest (2014) download" />
+                                    <figcaption class="hidden-xs hidden-sm">
+                                        <span class="icon-star"></span>
+                                        <h4 class="rating">6.7 / 10</h4>
+                                        <h4>Action</h4>
+                                        <h4>Mystery</h4>
+                                        <span class="button-green-download-big">View Details</span>
+                                    </figcaption>
+                                </figure>
+                            </a>
+                            <div class="browse-movie-bottom">
+                                <a href="https://yts.re/movie/the-guest-2014" class="browse-movie-title">The Guest</a>
+                                <div class="browse-movie-year">2014</div>
+                                <div class="browse-movie-tags">
+                                    <a href="https://yts.re/torrent/download/7CFA1BE24072795701386ABA248AD5E26C7F18AE.torrent">720p</a>
+                                    <a href="https://yts.re/torrent/download/C0E6E2013925A063FEDBD9DB3F0F18F328C08C9B.torrent">1080p</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="browse-movie-wrap col-xs-10 col-sm-4 col-md-5 col-lg-4">
+                            <a href="https://yts.re/movie/get-on-up-2014" class="browse-movie-link">
+                                <figure>
+                                    <img class="img-responsive" src="https://s.ynet.io/assets/images/movies/Get_on_Up_2014/medium-cover.jpg" alt="Get on Up (2014) download" />
+                                    <figcaption class="hidden-xs hidden-sm">
+                                        <span class="icon-star"></span>
+                                        <h4 class="rating">7.0 / 10</h4>
+                                        <h4>Biography</h4>
+                                        <h4>Drama</h4>
+                                        <span class="button-green-download-big">View Details</span>
+                                    </figcaption>
+                                </figure>
+                            </a>
+                            <div class="browse-movie-bottom">
+                                <a href="https://yts.re/movie/get-on-up-2014" class="browse-movie-title">Get on Up</a>
+                                <div class="browse-movie-year">2014</div>
+                                <div class="browse-movie-tags">
+                                    <a href="https://yts.re/torrent/download/20EEE76ACA000D1BE199C0E60B023146492D86BA.torrent">720p</a>
+                                    <a href="https://yts.re/torrent/download/16CF571DF87FB1A9AD5B1E197C04C80C06F6DF1D.torrent">1080p</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="browse-movie-wrap col-xs-10 col-sm-4 col-md-5 col-lg-4">
+                            <a href="https://yts.re/movie/dolls-1987" class="browse-movie-link">
+                                <figure>
+                                    <img class="img-responsive" src="https://s.ynet.io/assets/images/movies/Dolls_1987/medium-cover.jpg" alt="Dolls (1987) download" />
+                                    <figcaption class="hidden-xs hidden-sm">
+                                        <span class="icon-star"></span>
+                                        <h4 class="rating">6.4 / 10</h4>
+                                        <h4>Fantasy</h4>
+                                        <h4>Horror</h4>
+                                        <span class="button-green-download-big">View Details</span>
+                                    </figcaption>
+                                </figure>
+                            </a>
+                            <div class="browse-movie-bottom">
+                                <a href="https://yts.re/movie/dolls-1987" class="browse-movie-title">Dolls</a>
+                                <div class="browse-movie-year">1987</div>
+                                <div class="browse-movie-tags">
+                                    <a href="https://yts.re/torrent/download/C3D4198FB0875EDE5B1900B6DB2318876C037331.torrent">720p</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="browse-movie-wrap col-xs-10 col-sm-4 col-md-5 col-lg-4">
+                            <a href="https://yts.re/movie/gone-girl-2014" class="browse-movie-link">
+                                <figure>
+                                    <img class="img-responsive" src="https://s.ynet.io/assets/images/movies/Gone_Girl_2014/medium-cover.jpg" alt="Gone Girl (2014) download" />
+                                    <figcaption class="hidden-xs hidden-sm">
+                                        <span class="icon-star"></span>
+                                        <h4 class="rating">8.3 / 10</h4>
+                                        <h4>Drama</h4>
+                                        <h4>Mystery</h4>
+                                        <span class="button-green-download-big">View Details</span>
+                                    </figcaption>
+                                </figure>
+                            </a>
+                            <div class="browse-movie-bottom">
+                                <a href="https://yts.re/movie/gone-girl-2014" class="browse-movie-title">Gone Girl</a>
+                                <div class="browse-movie-year">2014</div>
+                                <div class="browse-movie-tags">
+                                    <a href="https://yts.re/torrent/download/A06130D93965BCA27A04CCB9A54CACEB1F5FBCB1.torrent">720p</a>
+                                    <a href="https://yts.re/torrent/download/D2310F718EB02F98665266786F7D00B42A20F055.torrent">1080p</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="browse-movie-wrap col-xs-10 col-sm-4 col-md-5 col-lg-4">
+                            <a href="https://yts.re/movie/uncle-buck-1989" class="browse-movie-link">
+                                <figure>
+                                    <img class="img-responsive" src="https://s.ynet.io/assets/images/movies/Uncle_Buck_1989/medium-cover.jpg" alt="Uncle Buck (1989) download" />
+                                    <figcaption class="hidden-xs hidden-sm">
+                                        <span class="icon-star"></span>
+                                        <h4 class="rating">6.9 / 10</h4>
+                                        <h4>Comedy</h4>
+                                        <h4>Drama</h4>
+                                        <span class="button-green-download-big">View Details</span>
+                                    </figcaption>
+                                </figure>
+                            </a>
+                            <div class="browse-movie-bottom">
+                                <a href="https://yts.re/movie/uncle-buck-1989" class="browse-movie-title">Uncle Buck</a>
+                                <div class="browse-movie-year">1989</div>
+                                <div class="browse-movie-tags">
+                                    <a href="https://yts.re/torrent/download/C0D8C035BA4EC680E5142A811F831D84AB79EED0.torrent">720p</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="browse-movie-wrap col-xs-10 col-sm-4 col-md-5 col-lg-4">
+                            <a href="https://yts.re/movie/order-of-chaos-2010" class="browse-movie-link">
+                                <figure>
+                                    <img class="img-responsive" src="https://s.ynet.io/assets/images/movies/Order_of_Chaos_2010/medium-cover.jpg" alt="Order of Chaos (2010) download" />
+                                    <figcaption class="hidden-xs hidden-sm">
+                                        <span class="icon-star"></span>
+                                        <h4 class="rating">4.8 / 10</h4>
+                                        <h4>Thriller</h4>
+                                        <span class="button-green-download-big">View Details</span>
+                                    </figcaption>
+                                </figure>
+                            </a>
+                            <div class="browse-movie-bottom">
+                                <a href="https://yts.re/movie/order-of-chaos-2010" class="browse-movie-title">Order of Chaos</a>
+                                <div class="browse-movie-year">2010</div>
+                                <div class="browse-movie-tags">
+                                    <a href="https://yts.re/torrent/download/F377F36816F40B09DCDDCA94595A84D3E134F4E1.torrent">720p</a>
+                                    <a href="https://yts.re/torrent/download/B617A1AB0D7AC35B995FDB59A688445575605EA3.torrent">1080p</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="browse-movie-wrap col-xs-10 col-sm-4 col-md-5 col-lg-4">
+                            <a href="https://yts.re/movie/the-boxtrolls-2014" class="browse-movie-link">
+                                <figure>
+                                    <img class="img-responsive" src="https://s.ynet.io/assets/images/movies/The_Boxtrolls_2014/medium-cover.jpg" alt="The Boxtrolls (2014) download" />
+                                    <figcaption class="hidden-xs hidden-sm">
+                                        <span class="icon-star"></span>
+                                        <h4 class="rating">6.9 / 10</h4>
+                                        <h4>Animation</h4>
+                                        <h4>Adventure</h4>
+                                        <span class="button-green-download-big">View Details</span>
+                                    </figcaption>
+                                </figure>
+                            </a>
+                            <div class="browse-movie-bottom">
+                                <a href="https://yts.re/movie/the-boxtrolls-2014" class="browse-movie-title">The Boxtrolls</a>
+                                <div class="browse-movie-year">2014</div>
+                                <div class="browse-movie-tags">
+                                    <a href="https://yts.re/torrent/download/064F18673E7A6ACBA8745CA4A71413509521D182.torrent">720p</a>
+                                    <a href="https://yts.re/torrent/download/205F03DB95617F7EAC3E9ED4415BB89FC6E362A8.torrent">1080p</a>
+                                    <a href="https://yts.re/torrent/download/43EA6DD24AC404E48F27A5CB4C43430E58C1D34F.torrent">3D</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="browse-movie-wrap col-xs-10 col-sm-4 col-md-5 col-lg-4">
+                            <a href="https://yts.re/movie/the-elevator-three-minutes-can-change-your-life-2013" class="browse-movie-link">
+                                <figure>
+                                    <img class="img-responsive" src="https://s.ynet.io/assets/images/movies/The_Elevator_Three_Minutes_Can_Change_Your_Life_2013/medium-cover.jpg" alt="The Elevator: Three Minutes Can Change Your Life (2013) download" />
+                                    <figcaption class="hidden-xs hidden-sm">
+                                        <span class="icon-star"></span>
+                                        <h4 class="rating">4.6 / 10</h4>
+                                        <h4>Drama</h4>
+                                        <h4>Thriller</h4>
+                                        <span class="button-green-download-big">View Details</span>
+                                    </figcaption>
+                                </figure>
+                            </a>
+                            <div class="browse-movie-bottom">
+                                <a href="https://yts.re/movie/the-elevator-three-minutes-can-change-your-life-2013" class="browse-movie-title">The Elevator: Three Minutes Can Change Your Life</a>
+                                <div class="browse-movie-year">2013</div>
+                                <div class="browse-movie-tags">
+                                    <a href="https://yts.re/torrent/download/64B2F94B3769F88398B182123B3224FD2C0E7C70.torrent">720p</a>
+                                    <a href="https://yts.re/torrent/download/56EFDC6E48C833C8241A784E93BD5D363553ECB1.torrent">1080p</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="browse-movie-wrap col-xs-10 col-sm-4 col-md-5 col-lg-4">
+                            <a href="https://yts.re/movie/when-a-stranger-calls-1979" class="browse-movie-link">
+                                <figure>
+                                    <img class="img-responsive" src="https://s.ynet.io/assets/images/movies/When_a_Stranger_Calls_1979/medium-cover.jpg" alt="When a Stranger Calls (1979) download" />
+                                    <figcaption class="hidden-xs hidden-sm">
+                                        <span class="icon-star"></span>
+                                        <h4 class="rating">6.6 / 10</h4>
+                                        <h4>Horror</h4>
+                                        <h4>Thriller</h4>
+                                        <span class="button-green-download-big">View Details</span>
+                                    </figcaption>
+                                </figure>
+                            </a>
+                            <div class="browse-movie-bottom">
+                                <a href="https://yts.re/movie/when-a-stranger-calls-1979" class="browse-movie-title">When a Stranger Calls</a>
+                                <div class="browse-movie-year">1979</div>
+                                <div class="browse-movie-tags">
+                                    <a href="https://yts.re/torrent/download/4EC46EA0BBF26C7B186E9FF49338163B7FCADCAB.torrent">1080p</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="browse-movie-wrap col-xs-10 col-sm-4 col-md-5 col-lg-4">
+                            <a href="https://yts.re/movie/i-origins-2014" class="browse-movie-link">
+                                <figure>
+                                    <img class="img-responsive" src="https://s.ynet.io/assets/images/movies/I_Origins_2014/medium-cover.jpg" alt="I Origins (2014) download" />
+                                    <figcaption class="hidden-xs hidden-sm">
+                                        <span class="icon-star"></span>
+                                        <h4 class="rating">7.3 / 10</h4>
+                                        <h4>Drama</h4>
+                                        <h4>Sci-Fi</h4>
+                                        <span class="button-green-download-big">View Details</span>
+                                    </figcaption>
+                                </figure>
+                            </a>
+                            <div class="browse-movie-bottom">
+                                <a href="https://yts.re/movie/i-origins-2014" class="browse-movie-title">I Origins</a>
+                                <div class="browse-movie-year">2014</div>
+                                <div class="browse-movie-tags">
+                                    <a href="https://yts.re/torrent/download/6B6A3A5EB90818AA0B184390492335A4DDD3EDFD.torrent">1080p</a>
+                                    <a href="https://yts.re/torrent/download/62CA78D3A9E36C4B8CC35FC585621100FBB9D9E6.torrent">720p</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="browse-movie-wrap col-xs-10 col-sm-4 col-md-5 col-lg-4">
+                            <a href="https://yts.re/movie/tusk-2014" class="browse-movie-link">
+                                <figure>
+                                    <img class="img-responsive" src="https://s.ynet.io/assets/images/movies/Tusk_2014/medium-cover.jpg" alt="Tusk (2014) download" />
+                                    <figcaption class="hidden-xs hidden-sm">
+                                        <span class="icon-star"></span>
+                                        <h4 class="rating">5.6 / 10</h4>
+                                        <h4>Comedy</h4>
+                                        <h4>Drama</h4>
+                                        <span class="button-green-download-big">View Details</span>
+                                    </figcaption>
+                                </figure>
+                            </a>
+                            <div class="browse-movie-bottom">
+                                <a href="https://yts.re/movie/tusk-2014" class="browse-movie-title">Tusk</a>
+                                <div class="browse-movie-year">2014</div>
+                                <div class="browse-movie-tags">
+                                    <a href="https://yts.re/torrent/download/F0AE04CDC9F77552F2BA7305438BE91E44BE2F4B.torrent">720p</a>
+                                    <a href="https://yts.re/torrent/download/ED8C77F151F1A66D60F63D5C7E8D841DF2B58F42.torrent">1080p</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="browse-movie-wrap col-xs-10 col-sm-4 col-md-5 col-lg-4">
+                            <a href="https://yts.re/movie/tmnt-2007" class="browse-movie-link">
+                                <figure>
+                                    <img class="img-responsive" src="https://s.ynet.io/assets/images/movies/TMNT_2007/medium-cover.jpg" alt="TMNT (2007) download" />
+                                    <figcaption class="hidden-xs hidden-sm">
+                                        <span class="icon-star"></span>
+                                        <h4 class="rating">6.4 / 10</h4>
+                                        <h4>Animation</h4>
+                                        <h4>Action</h4>
+                                        <span class="button-green-download-big">View Details</span>
+                                    </figcaption>
+                                </figure>
+                            </a>
+                            <div class="browse-movie-bottom">
+                                <a href="https://yts.re/movie/tmnt-2007" class="browse-movie-title">TMNT</a>
+                                <div class="browse-movie-year">2007</div>
+                                <div class="browse-movie-tags">
+                                    <a href="https://yts.re/torrent/download/FAEB78A46502DFAF2F650287A4721C81F6BCCFAA.torrent">1080p</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="browse-movie-wrap col-xs-10 col-sm-4 col-md-5 col-lg-4">
+                            <a href="https://yts.re/movie/the-devils-playground-1976" class="browse-movie-link">
+                                <figure>
+                                    <img class="img-responsive" src="https://s.ynet.io/assets/images/movies/The_Devils_Playground_1976/medium-cover.jpg" alt="The Devil&#039;s Playground (1976) download" />
+                                    <figcaption class="hidden-xs hidden-sm">
+                                        <span class="icon-star"></span>
+                                        <h4 class="rating">6.9 / 10</h4>
+                                        <h4>Drama</h4>
+                                        <span class="button-green-download-big">View Details</span>
+                                    </figcaption>
+                                </figure>
+                            </a>
+                            <div class="browse-movie-bottom">
+                                <a href="https://yts.re/movie/the-devils-playground-1976" class="browse-movie-title">The Devil&#039;s Playground</a>
+                                <div class="browse-movie-year">1976</div>
+                                <div class="browse-movie-tags">
+                                    <a href="https://yts.re/torrent/download/069D525395DE2C82BCEF8119FE17D74FD62A644C.torrent">720p</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="hidden-sm hidden-xs">
+                    <ul class="tsc_pagination tsc_paginationA tsc_paginationA06">
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=1">&laquo; First</a></li>
+
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=7">&laquo; Previous</a></li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=1">1</a></li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=2">2</a></li>
+                        <li class="unavailable">...</li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=5">5</a></li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=6">6</a></li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=7">7</a></li>
+                        <li><a href="#" class="current">8</a></li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=9">9</a></li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=10">10</a></li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=11">11</a></li>
+                        <li class="unavailable">...</li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=183">183</a></li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=184">184</a></li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=9">Next &raquo;</a></li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=184">Last &raquo;</a></li>
+                    </ul>
+                </div>
+                <div class="hidden-md hidden-lg">
+                    <ul class="tsc_pagination tsc_paginationA tsc_paginationA06">
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=7">&laquo; Previous</a></li>
+                        <li class="pagination-bordered">8 of 184</li>
+                        <li><a href="http://yts.re/browse-movie/0/All/All/0/latest?page=9">Next &raquo;</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <div class="container hidden-md hidden-lg">
+            <div class="row">
+                <div class="mobile-footer">
+                    <div class="col-sm-20">
+                        <a href="https://yts.re">
+                            <span class="glyphicon glyphicon-home"></span>
+                            <p>Home</p>
+                        </a>
+                        <a href="https://yts.re/browse-movies">
+                            <span class="glyphicon glyphicon-list-alt"></span>
+                            <p>Browse</p>
+                        </a>
+                        <a href="https://yts.re/login">
+                            <span class="glyphicon glyphicon-log-in"></span>
+                            <p>Login</p>
+                        </a>
+                    </div>
+                    <div class="col-sm-20">
+                        <a href="https://yts.re/register">
+                            <span class="glyphicon glyphicon-user"></span>
+                            <p>Register</p>
+                        </a>
+                        <a href="https://yts.re/requests">
+                            <span class="glyphicon glyphicon-asterisk"></span>
+                            <p>Requests</p>
+                        </a>
+                        <a href="https://yts.re/contact">
+                            <span class="glyphicon glyphicon-envelope"></span>
+                            <p>Contact</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-20 col-md-13">
+                        <ul class="text-center">
+                            <li>YTS &copy; 2011 - 2015</li>
+                            <li>-</li>
+                            <li><a href="https://yts.re/blog">Blog</a></li>
+                            <li>-</li>
+                            <li><a href="https://yts.re/dmca">DMCA</a></li>
+                            <li>-</li>
+                            <li><a href="https://yts.re/api">API</a></li>
+                            <li>-</li>
+                            <li><a href="https://yts.re/rss-guide">RSS</a></li>
+                            <li>-</li>
+                            <li><a href="https://yts.re/contact">Contact</a></li>
+                            <li>-</li>
+                            <li><a href="https://yts.re/browse-movies">Browse Movies</a></li>
+                            <li>-</li>
+                            <li><a href="https://yts.re/login">Login</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-20 col-md-7">
+                        <ul class="text-center">
+                            <li><a href="http://www.yifysubtitles.com/" target="_blank">YIFYSubtitles</a></li>
+                            <li>-</li>
+                            <li><a href="https://www.facebook.com/YIFYTORRENTS" target="_blank"><span class="icon-facebook"></span></a></li>
+                            <li>-</li>
+                            <li><a href="https://twitter.com/YIFY_Torrents" target="_blank"><span class="icon-twitter"></span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script type="text/javascript" src="https://s.ynet.io/assets/minified/1079394c4896c98e5d4e971195a9589f.js"></script>
+</body>
+</html>
