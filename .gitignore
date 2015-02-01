@@ -135,3 +135,4 @@ UpgradeLog*.XML
 *.js.map
 *.css.map
 packages
+/src/core/scraper/.ntvs_analysis.dat
