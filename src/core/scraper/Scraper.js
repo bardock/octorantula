@@ -22,6 +22,7 @@ var Scraper = (function () {
                 name: $link.text(),
                 year: parseInt($(this).find(".browse-movie-year").text()),
                 genres: $(this).find("figcaption h4:not(.rating)").map(function (i, x) { return $(x).text(); }).toArray(),
+                poster: $(this).find("img").attr("src"),
                 rating: {
                     imdb: parseFloat($(this).find(".rating").text())
                 },

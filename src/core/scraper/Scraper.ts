@@ -13,6 +13,7 @@ export interface IMovie {
     name: string;
     year: number;
     genres: string[];
+    poster: string;
     rating: { imdb: number; }
     downloads: IDownload[];
 }
@@ -46,6 +47,7 @@ export class Scraper {
                 name: $link.text(),
                 year: parseInt($(this).find(".browse-movie-year").text()),
                 genres: $(this).find("figcaption h4:not(.rating)").map((i, x) => $(x).text()).toArray<string>(),
+                poster: $(this).find("img").attr("src"),
                 rating: {
                     imdb: parseFloat($(this).find(".rating").text())
                 },
