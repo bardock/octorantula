@@ -154,6 +154,7 @@ interface Cheerio {
     // Not Documented
 
     toArray(): CheerioElement[];
+    toArray<T>(): T[];
 }
 
 interface CheerioOptionsInterface {

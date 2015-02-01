@@ -30,14 +30,14 @@ var Scraper = (function () {
             $(this).find(".browse-movie-tags a").each(function (i, elem) { return movie.downloads.push({
                 ripper: "yify",
                 source: $link.attr("href"),
-                torrent: $(elem).attr("href"),
                 quality: $(elem).text(),
+                torrent: $(elem).attr("href"),
             }); });
             movies.push(movie);
         });
         return {
+            nextUrl: $('.tsc_pagination a:contains(Next)').attr("href"),
             movies: movies,
-            nextUrl: $('.tsc_pagination a:contains(Next)').attr("href")
         };
     };
     return Scraper;
