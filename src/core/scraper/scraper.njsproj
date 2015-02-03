@@ -23,6 +23,7 @@
     <Content Include="README.min.html" />
     <Content Include="package.json" />
     <Content Include="README.md" />
+    <Content Include="tests\yify-detail.html" />
     <Content Include="tests\yify-list.html" />
   </ItemGroup>
   <ItemGroup>

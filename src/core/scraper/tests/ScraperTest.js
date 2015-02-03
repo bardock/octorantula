@@ -488,4 +488,27 @@ describe("parseList", function () {
         });
     });
 });
+describe("parseDetail", function () {
+    it("the interview", function (done) {
+        fs.readFile('yify-detail.html', 'utf8', function (err, html) {
+            if (err)
+                throw err;
+            var movie = {
+                downloads: [
+                    {
+                        torrent: "https://yts.re/torrent/download/4A5942DD1BB1DF3D2491B18FF48F627415E1947C.torrent",
+                        quality: "720p"
+                    },
+                    {
+                        torrent: "https://yts.re/torrent/download/746F5C84A8B21256636A2A93482434DCF73741EB.torrent",
+                        quality: "1080p"
+                    }
+                ]
+            };
+            var data = scraper.parseDetail(html, movie);
+            //should(data).be.eql({
+            done();
+        });
+    });
+});
 //# sourceMappingURL=ScraperTest.js.map

@@ -14,8 +14,23 @@ export interface IMovie {
     year: number;
     genres: string[];
     poster: string;
-    rating: { imdb: number; }
+    rating: {
+        imdb: number;
+        rottenTomatoes?: {
+            tomatoMeterPerc: number;
+            audiencePerc: number;
+        };
+    };
     downloads: IDownload[];
+    trailers?: string[];
+    imdbUrl?: string;
+    rottenTomatoesUrl?: string;
+    synopsis?: string;
+    directors?: string[];
+    cast?: {
+        actor: string;
+        character: string;
+    }[];
 }
 
 export interface IDownload {
@@ -35,9 +50,9 @@ export class Scraper {
         });
     }
 
-    parseList(body: string): IScrapedList {
+    parseList(html: string): IScrapedList {
 
-        var $ = cheerio.load(body);
+        var $ = cheerio.load(html);
 
         var movies = [];
 
@@ -66,5 +81,49 @@ export class Scraper {
             nextUrl: $('.tsc_pagination a:contains(Next)').attr("href"),
             movies: movies,
         }
+    }
+
+    parseDetail(html: string, movie: IMovie): IMovie {
+        var $ = cheerio.load(html);
+
+        movie.downloads.forEach(d => {
+            d.magnetTorrent = $(".modal-download a[href='" + d.torrent + "']").siblings(".download-torrent.magnet").attr("href");
+            //var versions = $(".tech-quality").toArray();
+            //var versionIndex = versions.indexOf($(".tech-quality:contains(" + d.quality + ")")[0]);
+            //var $container = $(".tech-spec-info:eq(" + versionIndex + ")");
+            // TODO
+        });
+
+        var trailer: string = $(".youtube").attr("href");
+        if (trailer) {
+            if (trailer.indexOf("//") == 0)
+                trailer = "http:" + trailer;
+            movie.trailers = [trailer];
+        }
+
+        movie.imdbUrl = $("a[title=IMDb Rating]").attr("href");
+        movie.rottenTomatoesUrl = $("a[href^='http://www.rottentomatoes.com']").attr("href");
+
+        var rottenTomatoes = {
+            tomatoMeterPerc: parseInt($("span:contains( - Critics)").siblings("span:contains(%)").text()),
+            audiencePerc: parseInt($("span:contains( - Audience)").siblings("span:contains(%)").text())
+        };
+        if (rottenTomatoes.tomatoMeterPerc && rottenTomatoes.audiencePerc)
+            movie.rating.rottenTomatoes = rottenTomatoes;
+
+        movie.synopsis = $("h3:contains(Synopsis)").next().next().text().trim();
+
+        movie.directors = $(".directors .name-cast").map((i, x) => $(x).text()).toArray<string>();
+
+        movie.cast = [];
+        $(".actors .name-cast").parent().each((i, x) => {
+            var actorAndCharacter = $(x).text().split("as");
+            movie.cast.push({
+                actor: actorAndCharacter[0].trim(),
+                character: actorAndCharacter[1].trim()
+            });
+        });
+        
+        return movie;
     }
 }
