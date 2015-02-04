@@ -25,6 +25,7 @@ export interface IMovie {
     trailers?: string[];
     imdbUrl?: string;
     rottenTomatoesUrl?: string;
+    duration?: string;
     synopsis?: string;
     directors?: string[];
     cast?: {
@@ -39,6 +40,12 @@ export interface IDownload {
     quality: string;
     torrent?: string;
     magnetTorrent?: string;
+    fileSize?: string;
+    resolution?: string;
+    language?: string;
+    fps?: number;
+    peers?: number;
+    seeds?: number;
 }
 
 export class Scraper {
@@ -88,11 +95,19 @@ export class Scraper {
 
         movie.downloads.forEach(d => {
             d.magnetTorrent = $(".modal-download a[href='" + d.torrent + "']").siblings(".download-torrent.magnet").attr("href");
-            //var versions = $(".tech-quality").toArray();
-            //var versionIndex = versions.indexOf($(".tech-quality:contains(" + d.quality + ")")[0]);
-            //var $container = $(".tech-spec-info:eq(" + versionIndex + ")");
-            // TODO
+            var versions = $(".tech-quality").toArray();
+            var versionIndex = versions.indexOf($(".tech-quality:contains(" + d.quality + ")")[0]);
+            var $container = $(".tech-spec-info").eq(versionIndex);
+            d.fileSize = $container.find(".icon-folder").first().parent().text().trim();
+            d.resolution = $container.find(".icon-expand").first().parent().text().trim();
+            d.language = $container.find(".icon-volume-medium").first().parent().text().trim();
+            d.fps = parseFloat($container.find(".icon-film").first().parent().text().trim());
+            var peersAndSeeds = $container.find(".tech-peers-seeds").first().parent().text().replace("P/S", "").trim().split("/");
+            d.peers = parseInt(peersAndSeeds[0]);
+            d.seeds = parseInt(peersAndSeeds[1]);
         });
+
+        movie.duration = $(".icon-clock").first().parent().text().trim();
 
         var trailer: string = $(".youtube").attr("href");
         if (trailer) {

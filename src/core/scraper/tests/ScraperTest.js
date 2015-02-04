@@ -512,12 +512,24 @@ describe("parseDetail", function () {
                     {
                         "torrent": "https:\/\/yts.re\/torrent\/download\/4A5942DD1BB1DF3D2491B18FF48F627415E1947C.torrent",
                         "quality": "720p",
-                        "magnetTorrent": "magnet:?xt=urn:btih:4A5942DD1BB1DF3D2491B18FF48F627415E1947C&dn=The+Interview+%282014%29&tr=http:\/\/exodus.desync.com:6969\/announce&tr=udp:\/\/tracker.openbittorrent.com:80\/announce&tr=udp:\/\/open.demonii.com:1337\/announce&tr=udp:\/\/exodus.desync.com:6969\/announce&tr=udp:\/\/tracker.yify-torrents.com\/announce"
+                        "magnetTorrent": "magnet:?xt=urn:btih:4A5942DD1BB1DF3D2491B18FF48F627415E1947C&dn=The+Interview+%282014%29&tr=http:\/\/exodus.desync.com:6969\/announce&tr=udp:\/\/tracker.openbittorrent.com:80\/announce&tr=udp:\/\/open.demonii.com:1337\/announce&tr=udp:\/\/exodus.desync.com:6969\/announce&tr=udp:\/\/tracker.yify-torrents.com\/announce",
+                        "fileSize": "812.15 MB",
+                        "resolution": "1280*536",
+                        "language": "English",
+                        "fps": 23.976,
+                        "peers": 10301,
+                        "seeds": 6743
                     },
                     {
                         "torrent": "https:\/\/yts.re\/torrent\/download\/746F5C84A8B21256636A2A93482434DCF73741EB.torrent",
                         "quality": "1080p",
-                        "magnetTorrent": "magnet:?xt=urn:btih:746F5C84A8B21256636A2A93482434DCF73741EB&dn=The+Interview+%282014%29&tr=http:\/\/exodus.desync.com:6969\/announce&tr=udp:\/\/tracker.openbittorrent.com:80\/announce&tr=udp:\/\/open.demonii.com:1337\/announce&tr=udp:\/\/exodus.desync.com:6969\/announce&tr=udp:\/\/tracker.yify-torrents.com\/announce"
+                        "magnetTorrent": "magnet:?xt=urn:btih:746F5C84A8B21256636A2A93482434DCF73741EB&dn=The+Interview+%282014%29&tr=http:\/\/exodus.desync.com:6969\/announce&tr=udp:\/\/tracker.openbittorrent.com:80\/announce&tr=udp:\/\/open.demonii.com:1337\/announce&tr=udp:\/\/exodus.desync.com:6969\/announce&tr=udp:\/\/tracker.yify-torrents.com\/announce",
+                        "fileSize": "1.64 GB",
+                        "resolution": "1920*808",
+                        "language": "English",
+                        "fps": 23.976,
+                        "peers": 19727,
+                        "seeds": 25272
                     }
                 ],
                 "rating": {
@@ -527,6 +539,7 @@ describe("parseDetail", function () {
                         "audiencePerc": 54
                     }
                 },
+                "duration": "1hr 52 min",
                 "trailers": [
                     "http:\/\/www.youtube.com\/embed\/frsvWVEHowg?rel=0&wmode=transparent&border=0&autoplay=1&iv_load_policy=3"
                 ],
