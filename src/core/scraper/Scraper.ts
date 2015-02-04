@@ -101,7 +101,7 @@ export class Scraper {
             movie.trailers = [trailer];
         }
 
-        movie.imdbUrl = $("a[title=IMDb Rating]").attr("href");
+        movie.imdbUrl = $("a[title='IMDb Rating']").attr("href");
         movie.rottenTomatoesUrl = $("a[href^='http://www.rottentomatoes.com']").attr("href");
 
         var rottenTomatoes = {

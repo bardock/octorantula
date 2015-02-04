@@ -496,8 +496,6 @@ describe("parseList", () => {
     });
 });
 
-
-
 describe("parseDetail",() => {
 
     it("the interview",(done) => {
@@ -515,11 +513,60 @@ describe("parseDetail",() => {
                         torrent: "https://yts.re/torrent/download/746F5C84A8B21256636A2A93482434DCF73741EB.torrent",
                         quality: "1080p"
                     }
-                ]
+                ],
+                rating: { imdb: 7.5 }
             };
             var data = scraper.parseDetail(html, movie);
 
-            //should(data).be.eql({
+            should(data).be.eql({
+                "downloads": [
+                    {
+                        "torrent": "https:\/\/yts.re\/torrent\/download\/4A5942DD1BB1DF3D2491B18FF48F627415E1947C.torrent",
+                        "quality": "720p",
+                        "magnetTorrent": "magnet:?xt=urn:btih:4A5942DD1BB1DF3D2491B18FF48F627415E1947C&dn=The+Interview+%282014%29&tr=http:\/\/exodus.desync.com:6969\/announce&tr=udp:\/\/tracker.openbittorrent.com:80\/announce&tr=udp:\/\/open.demonii.com:1337\/announce&tr=udp:\/\/exodus.desync.com:6969\/announce&tr=udp:\/\/tracker.yify-torrents.com\/announce"
+                    },
+                    {
+                        "torrent": "https:\/\/yts.re\/torrent\/download\/746F5C84A8B21256636A2A93482434DCF73741EB.torrent",
+                        "quality": "1080p",
+                        "magnetTorrent": "magnet:?xt=urn:btih:746F5C84A8B21256636A2A93482434DCF73741EB&dn=The+Interview+%282014%29&tr=http:\/\/exodus.desync.com:6969\/announce&tr=udp:\/\/tracker.openbittorrent.com:80\/announce&tr=udp:\/\/open.demonii.com:1337\/announce&tr=udp:\/\/exodus.desync.com:6969\/announce&tr=udp:\/\/tracker.yify-torrents.com\/announce"
+                    }
+                ],
+                "rating": {
+                    "imdb": 7.5,
+                    "rottenTomatoes": {
+                        "tomatoMeterPerc": 52,
+                        "audiencePerc": 54
+                    }
+                },
+                "trailers": [
+                    "http:\/\/www.youtube.com\/embed\/frsvWVEHowg?rel=0&wmode=transparent&border=0&autoplay=1&iv_load_policy=3"
+                ],
+                "imdbUrl": "http:\/\/www.imdb.com\/title\/tt2788710\/",
+                "rottenTomatoesUrl": "http:\/\/www.rottentomatoes.com\/alias?type=imdbid&s=2788710",
+                "synopsis": "In the action-comedy The Interview, Dave Skylark (James Franco) and his producer Aaron Rapoport (Seth Rogen) run the popular celebrity tabloid TV show \"Skylark Tonight.\" When they discover that North Korean dictator Kim Jong-un is a fan of the show, they land an interview with him in an attempt to legitimize themselves as journalists. As Dave and Aaron prepare to travel to Pyongyang, their plans change when the CIA recruits them, perhaps the two least-qualified men imaginable, to assassinate Kim Jong-un.",
+                "directors": [
+                    "Evan Goldberg",
+                    "Seth Rogen"
+                ],
+                "cast": [
+                    {
+                        "actor": "James Franco",
+                        "character": "Dave Skylark"
+                    },
+                    {
+                        "actor": "Seth Rogen",
+                        "character": "Aaron Rapaport"
+                    },
+                    {
+                        "actor": "Randall Park",
+                        "character": "President Kim"
+                    },
+                    {
+                        "actor": "Lizzy Caplan",
+                        "character": "Agent Lacey"
+                    }
+                ]
+            });
 
             done();
         });
