@@ -51,9 +51,10 @@ export interface IDownload {
 export class Scraper {
 
     scrapeList(url: string, callback: (err?: Error, data?: IScrapedList) => void) {
-        request(url, (err, response, body) => {
+        request(url, (err, response, html) => {
             if (err) callback(err);
-            callback(null, this.parseList(body));
+            console.log('----- LIST URL: %s', url);
+            callback(null, this.parseList(html));
         });
     }
 
@@ -88,6 +89,14 @@ export class Scraper {
             nextUrl: $('.tsc_pagination a:contains(Next)').attr("href"),
             movies: movies,
         }
+    }
+
+    parseDetailUrl(url: string, movie: IMovie, callback: (err?: Error, movie?: IMovie) => void) {
+        request(url, (err, response, html) => {
+            if (err) callback(err);
+            console.log('-- DETAIL URL: %s', url);
+            callback(null, this.parseDetail(html, movie));
+        });
     }
 
     parseDetail(html: string, movie: IMovie): IMovie {

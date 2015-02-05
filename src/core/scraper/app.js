@@ -13,13 +13,16 @@ function (callback) {
     scraper.scrapeList(url, function (err, data) {
         if (err)
             return callback(err);
-        console.log('----- URL: %s', url);
-        async.each(data.movies, function (movie) {
-            console.log(movie);
-        }, function () {
-            url = data.nextUrl;
-            url = null;
-            callback();
+        async.map(data.movies, function (movie, mapped) {
+            mapped(null, function (callback) { return scraper.parseDetailUrl(movie.downloads[0].source, movie, callback); });
+        }, function (err, movieDetailParsers) {
+            if (err)
+                callback(err);
+            async.parallelLimit(movieDetailParsers, 3, function (err, movies) {
+                url = data.nextUrl;
+                //url = null;
+                callback();
+            });
         });
     });
 }, 

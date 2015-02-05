@@ -12,26 +12,30 @@ async.whilst(
     () => { return url; },
 
     /* iterator: */
-    (callback) => {
+    callback => {
 
         scraper.scrapeList(url, (err, data) => {
 
             if (err) return callback(err);
 
-            console.log('----- URL: %s', url);
-
-            async.each(
+            async.map(
                 data.movies,
-                (movie) => { console.log(movie) },
-                () => {
-                    url = data.nextUrl;
-                    url = null;
-                    callback();
+                (movie, mapped) => {
+                    mapped(null, callback => scraper.parseDetailUrl(movie.downloads[0].source, movie, callback));
+                },
+                (err, movieDetailParsers) => {
+                    if (err) callback(err);
+                    
+                    async.parallelLimit(movieDetailParsers, 3, (err, movies) => {
+                        url = data.nextUrl;
+                        //url = null;
+                        callback();
+                    });
                 });
         });
     },
     /* callback: */
-    (err) => {
+    err => {
         if (err) throw err;
         console.log("DONE!");
     });

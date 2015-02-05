@@ -7,10 +7,11 @@ var Scraper = (function () {
     }
     Scraper.prototype.scrapeList = function (url, callback) {
         var _this = this;
-        request(url, function (err, response, body) {
+        request(url, function (err, response, html) {
             if (err)
                 callback(err);
-            callback(null, _this.parseList(body));
+            console.log('----- LIST URL: %s', url);
+            callback(null, _this.parseList(html));
         });
     };
     Scraper.prototype.parseList = function (html) {
@@ -40,6 +41,15 @@ var Scraper = (function () {
             nextUrl: $('.tsc_pagination a:contains(Next)').attr("href"),
             movies: movies,
         };
+    };
+    Scraper.prototype.parseDetailUrl = function (url, movie, callback) {
+        var _this = this;
+        request(url, function (err, response, html) {
+            if (err)
+                callback(err);
+            console.log('-- DETAIL URL: %s', url);
+            callback(null, _this.parseDetail(html, movie));
+        });
     };
     Scraper.prototype.parseDetail = function (html, movie) {
         var $ = cheerio.load(html);
