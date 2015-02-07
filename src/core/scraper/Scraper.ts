@@ -32,6 +32,7 @@ export interface IMovie {
         actor: string;
         character: string;
     }[];
+    addedOn?: Date;
 }
 
 export interface IDownload {
