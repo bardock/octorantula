@@ -69,6 +69,7 @@ describe("parseDetail", () => {
                     "http:\/\/www.youtube.com\/embed\/frsvWVEHowg?rel=0&wmode=transparent&border=0&autoplay=1&iv_load_policy=3"
                 ],
                 "imdbUrl": "http:\/\/www.imdb.com\/title\/tt2788710\/",
+                "imdbId": "tt2788710",
                 "rottenTomatoesUrl": "http:\/\/www.rottentomatoes.com\/alias?type=imdbid&s=2788710",
                 "synopsis": "In the action-comedy The Interview, Dave Skylark (James Franco) and his producer Aaron Rapoport (Seth Rogen) run the popular celebrity tabloid TV show \"Skylark Tonight.\" When they discover that North Korean dictator Kim Jong-un is a fan of the show, they land an interview with him in an attempt to legitimize themselves as journalists. As Dave and Aaron prepare to travel to Pyongyang, their plans change when the CIA recruits them, perhaps the two least-qualified men imaginable, to assassinate Kim Jong-un.",
                 "directors": [

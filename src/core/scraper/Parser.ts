@@ -32,6 +32,7 @@ class Parser {
         $('.browse-movie-wrap').each(function () {
             var $link = $(this).find("a.browse-movie-title");
             var movie: Models.IMovie = {
+                imdbId: null,
                 name: $link.text(),
                 year: parseInt($(this).find(".browse-movie-year").text()),
                 genres: $(this).find("figcaption h4:not(.rating)").map((i, x) => $(x).text()).toArray<string>(),
@@ -100,6 +101,11 @@ class Parser {
         movie.imdbUrl = $("a[title='IMDb Rating']").attr("href");
         if (!movie.imdbUrl)
             throw "IMDB url was not found for movie " + movie.name;
+
+        var imdbIdMatch = /\/(tt\d+)/.exec(movie.imdbUrl);
+        if (!imdbIdMatch || imdbIdMatch.length != 2)
+            throw "Unexpected format in IMDB url " + movie.imdbUrl;
+        movie.imdbId = imdbIdMatch[1];
 
         movie.rottenTomatoesUrl = $("a[href^='http://www.rottentomatoes.com']").attr("href");
 

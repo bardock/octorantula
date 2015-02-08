@@ -12,15 +12,23 @@ mongodb.MongoClient.connect(config.mongo.connection, function (err, db) {
     if (err)
         throw err;
     logger.debug("Connected to mongo");
-    var sc = new Scraper(db);
-    sc.init();
+    db.collection("movies").ensureIndex({ imdbId: 1 }, { unique: true }, function (err) {
+        if (err)
+            throw err;
+        var scraper = new Scraper(db);
+        scraper.start(function (err) {
+            scraper.close();
+            if (err)
+                throw err;
+        });
+    });
 });
 var Scraper = (function () {
     function Scraper(db) {
         this.db = db;
         this.parser = new Parser();
     }
-    Scraper.prototype.init = function () {
+    Scraper.prototype.start = function (callback) {
         var _this = this;
         var url = config.initUrl;
         async.whilst(
@@ -48,10 +56,10 @@ var Scraper = (function () {
         }, 
         /* callback: */
         function (err) {
-            _this.close();
             if (err)
-                throw err;
+                callback(err);
             logger.info("Done!");
+            callback();
         });
     };
     Scraper.prototype.parseDetails = function (data, callback) {
@@ -74,7 +82,7 @@ var Scraper = (function () {
             m.addedOn = date;
             return {
                 replaceOne: {
-                    filter: { name: m.name, year: m.year },
+                    filter: { imdbId: m.imdbId },
                     replacement: m,
                     upsert: true
                 }

@@ -6,6 +6,7 @@
     }
 
     export interface IMovie {
+        imdbId: string;
         name: string;
         year: number;
         genres: string[];

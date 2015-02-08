@@ -17,8 +17,17 @@ mongodb.MongoClient.connect(config.mongo.connection, function (err, db) {
 
     logger.debug("Connected to mongo");
 
-    var sc = new Scraper(db);
-    sc.init();
+    db.collection("movies").ensureIndex({ imdbId: 1 }, { unique: true }, err => {
+        if (err) throw err;
+
+        var scraper = new Scraper(db);
+
+        scraper.start(err => {
+            scraper.close();
+            if (err) throw err;
+        });
+    });
+
 });
 
 class Scraper {
@@ -31,7 +40,7 @@ class Scraper {
         this.parser = new Parser();
     }
 
-    init() {
+    start(callback: (err?: Error) => void) {
         var url = config.initUrl;
 
         async.whilst(
@@ -59,9 +68,9 @@ class Scraper {
             },
             /* callback: */
             err => {
-                this.close();
-                if (err) throw err;
+                if (err) callback(err);
                 logger.info("Done!");
+                callback();
             });
     }
 
@@ -93,7 +102,7 @@ class Scraper {
             m.addedOn = date;
             return {
                 replaceOne: {
-                    filter: { name: m.name, year: m.year },
+                    filter: { imdbId: m.imdbId },
                     replacement: m,
                     upsert: true
                 }
@@ -107,7 +116,7 @@ class Scraper {
         });
     }
 
-    private close() {
+    close() {
         this.db.close();
     }
 }
