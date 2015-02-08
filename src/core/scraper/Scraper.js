@@ -1,5 +1,6 @@
 /// <reference path="typings/request/request.d.ts" />
 /// <reference path="typings/cheerio/cheerio.d.ts" />
+var logger = require('./logger');
 var request = require('request');
 var cheerio = require('cheerio');
 var Scraper = (function () {
@@ -7,11 +8,14 @@ var Scraper = (function () {
     }
     Scraper.prototype.scrapeList = function (url, callback) {
         var _this = this;
+        logger.info("Requesting list at url: %s", url);
         request(url, function (err, response, html) {
             if (err)
                 callback(err);
-            console.log('----- LIST URL: %s', url);
-            callback(null, _this.parseList(html));
+            logger.debug("List html obtained from url: %s", url);
+            var list = _this.parseList(html);
+            logger.debug("List parsed from url: %s", url, list);
+            callback(null, list);
         });
     };
     Scraper.prototype.parseList = function (html) {
@@ -44,11 +48,14 @@ var Scraper = (function () {
     };
     Scraper.prototype.parseDetailUrl = function (url, movie, callback) {
         var _this = this;
+        logger.info("Requesting detail at url: %s", url);
         request(url, function (err, response, html) {
             if (err)
                 callback(err);
-            console.log('-- DETAIL URL: %s', url);
-            callback(null, _this.parseDetail(html, movie));
+            logger.debug("Detail html obtained from url: %s", url);
+            movie = _this.parseDetail(html, movie);
+            logger.debug("Movie parsed from url: %s", url, movie);
+            callback(null, movie);
         });
     };
     Scraper.prototype.parseDetail = function (html, movie) {

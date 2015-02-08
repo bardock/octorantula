@@ -1,6 +1,7 @@
 ﻿/// <reference path="typings/request/request.d.ts" />
 /// <reference path="typings/cheerio/cheerio.d.ts" />
 
+import logger = require('./logger');
 import request = require('request');
 import cheerio = require('cheerio');
 
@@ -52,10 +53,17 @@ export interface IDownload {
 export class Scraper {
 
     scrapeList(url: string, callback: (err?: Error, data?: IScrapedList) => void) {
-        request(url, (err, response, html) => {
+        logger.info("Requesting list at url: %s", url);
+
+        request(url,(err, response, html) => {
             if (err) callback(err);
-            console.log('----- LIST URL: %s', url);
-            callback(null, this.parseList(html));
+
+            logger.debug("List html obtained from url: %s", url);
+
+            var list = this.parseList(html);
+            logger.debug("List parsed from url: %s", url, list);
+
+            callback(null, list);
         });
     }
 
@@ -93,10 +101,17 @@ export class Scraper {
     }
 
     parseDetailUrl(url: string, movie: IMovie, callback: (err?: Error, movie?: IMovie) => void) {
+        logger.info("Requesting detail at url: %s", url);
+
         request(url, (err, response, html) => {
             if (err) callback(err);
-            console.log('-- DETAIL URL: %s', url);
-            callback(null, this.parseDetail(html, movie));
+
+            logger.debug("Detail html obtained from url: %s", url);
+
+            movie = this.parseDetail(html, movie);
+            logger.debug("Movie parsed from url: %s", url, movie);
+
+            callback(null, movie);
         });
     }
 

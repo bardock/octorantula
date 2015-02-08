@@ -1,8 +1,11 @@
 ﻿/// <reference path="../typings/should/should.d.ts" />
 
+import logger = require('../logger');
 import should = require('should');
 import fs = require('fs');
 import ScraperModule = require('../Scraper');
+
+logger.clear();
 
 var scraper = new ScraperModule.Scraper();
 

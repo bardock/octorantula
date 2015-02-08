@@ -1,15 +1,18 @@
 /// <reference path="typings/async/async.d.ts" />
+/// <reference path="typings/winston/winston.d.ts" />
 /// <reference path="typings/mongodb/mongodb.d.ts" />
 var async = require('async');
+var logger = require('./logger');
 var mongodb = require('mongodb');
 var ScraperModule = require('./Scraper');
+logger.info("Starting scraper...");
 // Connection URL
 var mongoUrl = 'mongodb://admin:fedefede@ds052837.mongolab.com:52837/octorantula';
 // Use connect method to connect to the Server
 mongodb.MongoClient.connect(mongoUrl, function (err, db) {
     if (err)
         throw err;
-    console.log("Connected correctly to mongo");
+    logger.debug("Connected to mongo");
     var url = "https://yts.re/browse-movie/0/All/All/0/latest/";
     var scraper = new ScraperModule.Scraper();
     async.whilst(
@@ -28,6 +31,7 @@ mongodb.MongoClient.connect(mongoUrl, function (err, db) {
                 if (err)
                     callback(err);
                 async.parallelLimit(movieDetailParsers, 3, function (err, movies) {
+                    logger.debug("Saving %s movies...", movies.length);
                     var col = db.collection("movies");
                     var date = new Date();
                     var operation = movies.map(function (m) {
@@ -43,7 +47,7 @@ mongodb.MongoClient.connect(mongoUrl, function (err, db) {
                     col.bulkWrite(operation, function (err, r) {
                         if (err)
                             callback(err);
-                        console.log(r);
+                        logger.debug("Movies saved", r);
                     });
                     url = data.nextUrl;
                     //url = null;
@@ -54,10 +58,10 @@ mongodb.MongoClient.connect(mongoUrl, function (err, db) {
     }, 
     /* callback: */
     function (err) {
+        db.close();
         if (err)
             throw err;
-        db.close();
-        console.log("DONE!");
+        logger.info("Done!");
     });
 });
 //# sourceMappingURL=app.js.map

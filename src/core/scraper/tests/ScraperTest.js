@@ -1,7 +1,9 @@
 /// <reference path="../typings/should/should.d.ts" />
+var logger = require('../logger');
 var should = require('should');
 var fs = require('fs');
 var ScraperModule = require('../Scraper');
+logger.clear();
 var scraper = new ScraperModule.Scraper();
 describe("parseList", function () {
     it("20 items", function (done) {
