@@ -136,3 +136,5 @@ UpgradeLog*.XML
 *.css.map
 packages
 /src/core/scraper/.ntvs_analysis.dat
+/src/core/scraper/config-logger-loggly.js
+/src/core/scraper/config-mongo.js

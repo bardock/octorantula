@@ -2,18 +2,17 @@
 /// <reference path="typings/winston/winston.d.ts" />
 /// <reference path="typings/mongodb/mongodb.d.ts" />
 var async = require('async');
+var config = require('./config');
+require('./config-mongo');
 var logger = require('./logger');
 var mongodb = require('mongodb');
 var ScraperModule = require('./Scraper');
 logger.info("Starting scraper...");
-// Connection URL
-var mongoUrl = 'mongodb://admin:fedefede@ds052837.mongolab.com:52837/octorantula';
-// Use connect method to connect to the Server
-mongodb.MongoClient.connect(mongoUrl, function (err, db) {
+mongodb.MongoClient.connect(config.mongo.connection, function (err, db) {
     if (err)
         throw err;
     logger.debug("Connected to mongo");
-    var url = "https://yts.re/browse-movie/0/All/All/0/latest/";
+    var url = config.initUrl;
     var scraper = new ScraperModule.Scraper();
     async.whilst(
     /* test: */
