@@ -117,6 +117,8 @@ class Scraper {
                 }
                 return lastMovieFound;
             });
+            if (!lastMovieFound)
+                throw "Last existing movie was not found in page";
         }
         if (!movies.length)
             callback(null, []);
