@@ -104,5 +104,5 @@ var Scraper = (function () {
     };
     return Scraper;
 })();
-exports.Scraper = Scraper;
+module.exports = Scraper;
 //# sourceMappingURL=Scraper.js.map

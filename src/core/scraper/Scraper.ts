@@ -2,57 +2,13 @@
 /// <reference path="typings/cheerio/cheerio.d.ts" />
 
 import logger = require('./logger');
+import Models = require('./Models');
 import request = require('request');
 import cheerio = require('cheerio');
 
-export interface IScrapedList {
-    nextUrl: string;
-    movies: IMovie[];
-}
+class Scraper {
 
-export interface IMovie {
-    name: string;
-    year: number;
-    genres: string[];
-    poster: string;
-    rating: {
-        imdb: number;
-        rottenTomatoes?: {
-            tomatoMeterPerc: number;
-            audiencePerc: number;
-        };
-    };
-    downloads: IDownload[];
-    trailers?: string[];
-    imdbUrl?: string;
-    rottenTomatoesUrl?: string;
-    duration?: string;
-    synopsis?: string;
-    directors?: string[];
-    cast?: {
-        actor: string;
-        character: string;
-    }[];
-    addedOn?: Date;
-}
-
-export interface IDownload {
-    ripper: string;
-    source: string;
-    quality: string;
-    torrent?: string;
-    magnetTorrent?: string;
-    fileSize?: string;
-    resolution?: string;
-    language?: string;
-    fps?: number;
-    peers?: number;
-    seeds?: number;
-}
-
-export class Scraper {
-
-    scrapeList(url: string, callback: (err?: Error, data?: IScrapedList) => void) {
+    scrapeList(url: string, callback: (err?: Error, data?: Models.IScrapedList) => void) {
         logger.info("Requesting list at url: %s", url);
 
         request(url,(err, response, html) => {
@@ -67,7 +23,7 @@ export class Scraper {
         });
     }
 
-    parseList(html: string): IScrapedList {
+    parseList(html: string): Models.IScrapedList {
 
         var $ = cheerio.load(html);
 
@@ -75,7 +31,7 @@ export class Scraper {
 
         $('.browse-movie-wrap').each(function () {
             var $link = $(this).find("a.browse-movie-title");
-            var movie: IMovie = {
+            var movie: Models.IMovie = {
                 name: $link.text(),
                 year: parseInt($(this).find(".browse-movie-year").text()),
                 genres: $(this).find("figcaption h4:not(.rating)").map((i, x) => $(x).text()).toArray<string>(),
@@ -100,7 +56,7 @@ export class Scraper {
         }
     }
 
-    parseDetailUrl(url: string, movie: IMovie, callback: (err?: Error, movie?: IMovie) => void) {
+    parseDetailUrl(url: string, movie: Models.IMovie, callback: (err?: Error, movie?: Models.IMovie) => void) {
         logger.info("Requesting detail at url: %s", url);
 
         request(url, (err, response, html) => {
@@ -115,7 +71,7 @@ export class Scraper {
         });
     }
 
-    parseDetail(html: string, movie: IMovie): IMovie {
+    parseDetail(html: string, movie: Models.IMovie): Models.IMovie {
         var $ = cheerio.load(html);
 
         movie.downloads.forEach(d => {
@@ -170,3 +126,5 @@ export class Scraper {
         return movie;
     }
 }
+
+export = Scraper;

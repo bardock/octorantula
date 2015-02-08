@@ -3,11 +3,12 @@
 import logger = require('../logger');
 import should = require('should');
 import fs = require('fs');
-import ScraperModule = require('../Scraper');
+import Models = require('../Models');
+import Scraper = require('../Scraper');
 
 logger.clear();
 
-var scraper = new ScraperModule.Scraper();
+var scraper = new Scraper();
 
 describe("parseList", () => {
 
@@ -506,7 +507,7 @@ describe("parseDetail",() => {
         fs.readFile('yify-detail.html', 'utf8', function (err, html) {
             if (err) throw err;
 
-            var movie: ScraperModule.IMovie = <any>{
+            var movie: Models.IMovie = <any>{
                 downloads: [
                     {
                         torrent: "https://yts.re/torrent/download/4A5942DD1BB1DF3D2491B18FF48F627415E1947C.torrent",

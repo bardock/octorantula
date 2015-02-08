@@ -2,9 +2,9 @@
 var logger = require('../logger');
 var should = require('should');
 var fs = require('fs');
-var ScraperModule = require('../Scraper');
+var Scraper = require('../Scraper');
 logger.clear();
-var scraper = new ScraperModule.Scraper();
+var scraper = new Scraper();
 describe("parseList", function () {
     it("20 items", function (done) {
         fs.readFile('yify-list.html', 'utf8', function (err, html) {

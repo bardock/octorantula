@@ -29,6 +29,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="logger.ts" />
+    <TypeScriptCompile Include="Models.ts" />
     <TypeScriptCompile Include="Scraper.ts" />
     <TypeScriptCompile Include="tests\ScraperTest.ts">
       <SubType>Code</SubType>

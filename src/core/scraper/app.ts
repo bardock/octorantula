@@ -6,8 +6,9 @@ import async = require('async');
 var config = require('./config');
 require('./config-mongo');
 import logger = require('./logger');
+import Models = require('./Models');
+import Scraper = require('./Scraper');
 import mongodb = require('mongodb');
-import ScraperModule = require('./Scraper');
 
 logger.info("Starting scraper...");
 
@@ -16,63 +17,97 @@ mongodb.MongoClient.connect(config.mongo.connection, function (err, db) {
 
     logger.debug("Connected to mongo");
 
-    var url = config.initUrl;
+    var sc = new Sc(db);
+    sc.init();
+});
 
-    var scraper = new ScraperModule.Scraper();
+class Sc {
 
-    async.whilst(
-        /* test: */
-        () => { return url; },
+    private db: mongodb.Db
+    private scraper: Scraper
 
-        /* iterator: */
-        callback => {
+    constructor(db: mongodb.Db) {
+        this.db = db;
+        this.scraper = new Scraper();
+    }
 
-            scraper.scrapeList(url, (err, data) => {
+    init() {
+        var url = config.initUrl;
 
-                if (err) return callback(err);
+        async.whilst(
+            /* test: */
+            () => { return url; },
 
-                async.map(
-                    data.movies,
-                    (movie, mapped) => {
-                        mapped(null, callback => scraper.parseDetailUrl(movie.downloads[0].source, movie, callback));
-                    },
-                    (err, movieDetailParsers) => {
+            /* iterator: */
+            callback => {
+
+                this.scraper.scrapeList(url,(err, data) => {
+                    if (err) return callback(err);
+
+                    this.parseDetails(data,(err, movies) => {
                         if (err) callback(err);
 
-                        async.parallelLimit(movieDetailParsers, 3,(err, movies: ScraperModule.IMovie[]) => {
-
-                            logger.debug("Saving %s movies...", movies.length);
-
-                            var col: any = db.collection("movies");
-                            var date = new Date();
-
-                            var operation = movies.map(m => {
-                                m.addedOn = date;
-                                return {
-                                    replaceOne: {
-                                        filter: { name: m.name, year: m.year },
-                                        replacement: m,
-                                        upsert: true
-                                    }
-                                }
-                            });
-
-                            col.bulkWrite(operation,(err, r) => {
-                                if (err) callback(err);
-                                logger.debug("Movies saved", r);
-                            });
-
-                            url = data.nextUrl;
-                            //url = null;
-                            callback();
+                        // save async
+                        this.save(movies, err => {
+                            if (err) callback(err)
                         });
+
+                        url = data.nextUrl;
+                        callback();
+                    });
+                });
+            },
+            /* callback: */
+            err => {
+                this.close();
+                if (err) throw err;
+                logger.info("Done!");
+            });
+    }
+
+    private parseDetails(data: Models.IScrapedList, callback: (err: Error, movies?: Models.IMovie[]) => void) {
+        async.map(
+            data.movies,
+            (movie, mapped) => {
+                mapped(null, callback => this.scraper.parseDetailUrl(movie.downloads[0].source, movie, callback));
+            },
+            (err, movieDetailParsers) => {
+                if (err) callback(err);
+
+                async.parallelLimit(
+                    movieDetailParsers,
+                    config.parseDetailsInParallel,
+                    (err, movies: Models.IMovie[]) => {
+                        callback(null, movies);
                     });
             });
-        },
-        /* callback: */
-        err => {
-            db.close();
-            if (err) throw err;
-            logger.info("Done!");
+    }
+
+    private save(movies: Models.IMovie[], callback) {
+        logger.debug("Saving %s movies...", movies.length);
+
+        var col: any = this.db.collection("movies");
+        var date = new Date();
+
+        var operation = movies.map(m => {
+            m.addedOn = date;
+            return {
+                replaceOne: {
+                    filter: { name: m.name, year: m.year },
+                    replacement: m,
+                    upsert: true
+                }
+            }
         });
-});
+
+        col.bulkWrite(operation,(err, r) => {
+            if (err) callback(err);
+            logger.debug("Movies saved", r);
+            callback();
+        });
+    }
+
+    private close() {
+        this.db.close();
+    }
+}
