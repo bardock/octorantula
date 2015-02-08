@@ -58,7 +58,7 @@ export class Scraper {
         request(url,(err, response, html) => {
             if (err) callback(err);
 
-            logger.debug("List html obtained from url: %s", url);
+            logger.debug("List html obtained from url: %s", url, { html: html });
 
             var list = this.parseList(html);
             logger.debug("List parsed from url: %s", url, list);
@@ -106,7 +106,7 @@ export class Scraper {
         request(url, (err, response, html) => {
             if (err) callback(err);
 
-            logger.debug("Detail html obtained from url: %s", url);
+            logger.debug("Detail html obtained from url: %s", url, { html: html });
 
             movie = this.parseDetail(html, movie);
             logger.debug("Movie parsed from url: %s", url, movie);
@@ -142,6 +142,9 @@ export class Scraper {
         }
 
         movie.imdbUrl = $("a[title='IMDb Rating']").attr("href");
+        if (!movie.imdbUrl)
+            throw "IMDB url was not found for movie " + movie.name;
+
         movie.rottenTomatoesUrl = $("a[href^='http://www.rottentomatoes.com']").attr("href");
 
         var rottenTomatoes = {

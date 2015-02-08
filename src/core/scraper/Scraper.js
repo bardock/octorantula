@@ -12,7 +12,7 @@ var Scraper = (function () {
         request(url, function (err, response, html) {
             if (err)
                 callback(err);
-            logger.debug("List html obtained from url: %s", url);
+            logger.debug("List html obtained from url: %s", url, { html: html });
             var list = _this.parseList(html);
             logger.debug("List parsed from url: %s", url, list);
             callback(null, list);
@@ -52,7 +52,7 @@ var Scraper = (function () {
         request(url, function (err, response, html) {
             if (err)
                 callback(err);
-            logger.debug("Detail html obtained from url: %s", url);
+            logger.debug("Detail html obtained from url: %s", url, { html: html });
             movie = _this.parseDetail(html, movie);
             logger.debug("Movie parsed from url: %s", url, movie);
             callback(null, movie);
@@ -81,6 +81,8 @@ var Scraper = (function () {
             movie.trailers = [trailer];
         }
         movie.imdbUrl = $("a[title='IMDb Rating']").attr("href");
+        if (!movie.imdbUrl)
+            throw "IMDB url was not found for movie " + movie.name;
         movie.rottenTomatoesUrl = $("a[href^='http://www.rottentomatoes.com']").attr("href");
         var rottenTomatoes = {
             tomatoMeterPerc: parseInt($("span:contains( - Critics)").siblings("span:contains(%)").text()),
