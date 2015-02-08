@@ -29,6 +29,7 @@
             actor: string;
             character: string;
         }[];
+        sourceListUrl: string;
         addedOn?: Date;
     }
 

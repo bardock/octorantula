@@ -17,6 +17,8 @@ class Parser {
             logger.debug("List html obtained from url: %s", url, { html: html });
 
             var list = this.parseList(html);
+            list.movies.forEach(x => x.sourceListUrl = url);
+
             logger.debug("List parsed from url: %s", url, list);
 
             callback(null, list);
@@ -40,7 +42,8 @@ class Parser {
                 rating: {
                     imdb: parseFloat($(this).find(".rating").text())
                 },
-                downloads: []
+                downloads: [],
+                sourceListUrl: null
             };
             $(this).find(".browse-movie-tags a").each((i, elem) => movie.downloads.push({
                 ripper: "yify",

@@ -41,7 +41,8 @@ describe("parseList", () => {
                                 "quality": "1080p",
                                 "torrent": "https://yts.re/torrent/download/EC70141F8005A5123CEFDFE273AB033FDE177533.torrent"
                             }
-                        ]
+                        ],
+                        "sourceListUrl": null
                     },
                     {
                         "imdbId": null,
@@ -68,7 +69,8 @@ describe("parseList", () => {
                                 "quality": "1080p",
                                 "torrent": "https://yts.re/torrent/download/06ED4E4659AE361B160F280C1CAF82C9E9FFA682.torrent"
                             }
-                        ]
+                        ],
+                        "sourceListUrl": null
                     },
                     {
                         "imdbId": null,
@@ -95,7 +97,8 @@ describe("parseList", () => {
                                 "quality": "720p",
                                 "torrent": "https://yts.re/torrent/download/482E6B46CD9D48BA711CB577E1342D6CF3D2FA4F.torrent"
                             }
-                        ]
+                        ],
+                        "sourceListUrl": null
                     },
                     {
                         "imdbId": null,
@@ -116,7 +119,8 @@ describe("parseList", () => {
                                 "quality": "720p",
                                 "torrent": "https://yts.re/torrent/download/F3C11F98ACAA57B673865C1B833C3F0E88E8C2DA.torrent"
                             }
-                        ]
+                        ],
+                        "sourceListUrl": null
                     },
                     {
                         "imdbId": null,
@@ -143,7 +147,8 @@ describe("parseList", () => {
                                 "quality": "1080p",
                                 "torrent": "https://yts.re/torrent/download/F47032D9CB490C02D3607BE6E1DAA52EBAC22983.torrent"
                             }
-                        ]
+                        ],
+                        "sourceListUrl": null
                     },
                     {
                         "imdbId": null,
@@ -164,7 +169,8 @@ describe("parseList", () => {
                                 "quality": "1080p",
                                 "torrent": "https://yts.re/torrent/download/0E3448BFDC802CA3667B33DF698FA066D82E7E15.torrent"
                             }
-                        ]
+                        ],
+                        "sourceListUrl": null
                     },
                     {
                         "imdbId": null,
@@ -185,7 +191,8 @@ describe("parseList", () => {
                                 "quality": "720p",
                                 "torrent": "https://yts.re/torrent/download/147FB970C238B0EA6F5F803F2CC4FC8126361C8F.torrent"
                             }
-                        ]
+                        ],
+                        "sourceListUrl": null
                     },
                     {
                         "imdbId": null,
@@ -212,7 +219,8 @@ describe("parseList", () => {
                                 "quality": "1080p",
                                 "torrent": "https://yts.re/torrent/download/C0E6E2013925A063FEDBD9DB3F0F18F328C08C9B.torrent"
                             }
-                        ]
+                        ],
+                        "sourceListUrl": null
                     },
                     {
                         "imdbId": null,
@@ -239,7 +247,8 @@ describe("parseList", () => {
                                 "quality": "1080p",
                                 "torrent": "https://yts.re/torrent/download/16CF571DF87FB1A9AD5B1E197C04C80C06F6DF1D.torrent"
                             }
-                        ]
+                        ],
+                        "sourceListUrl": null
                     },
                     {
                         "imdbId": null,
@@ -260,7 +269,8 @@ describe("parseList", () => {
                                 "quality": "720p",
                                 "torrent": "https://yts.re/torrent/download/C3D4198FB0875EDE5B1900B6DB2318876C037331.torrent"
                             }
-                        ]
+                        ],
+                        "sourceListUrl": null
                     },
                     {
                         "imdbId": null,
@@ -287,7 +297,8 @@ describe("parseList", () => {
                                 "quality": "1080p",
                                 "torrent": "https://yts.re/torrent/download/D2310F718EB02F98665266786F7D00B42A20F055.torrent"
                             }
-                        ]
+                        ],
+                        "sourceListUrl": null
                     },
                     {
                         "imdbId": null,
@@ -308,7 +319,8 @@ describe("parseList", () => {
                                 "quality": "720p",
                                 "torrent": "https://yts.re/torrent/download/C0D8C035BA4EC680E5142A811F831D84AB79EED0.torrent"
                             }
-                        ]
+                        ],
+                        "sourceListUrl": null
                     },
                     {
                         "imdbId": null,
@@ -334,7 +346,8 @@ describe("parseList", () => {
                                 "quality": "1080p",
                                 "torrent": "https://yts.re/torrent/download/B617A1AB0D7AC35B995FDB59A688445575605EA3.torrent"
                             }
-                        ]
+                        ],
+                        "sourceListUrl": null
                     },
                     {
                         "imdbId": null,
@@ -367,7 +380,8 @@ describe("parseList", () => {
                                 "quality": "3D",
                                 "torrent": "https://yts.re/torrent/download/43EA6DD24AC404E48F27A5CB4C43430E58C1D34F.torrent"
                             }
-                        ]
+                        ],
+                        "sourceListUrl": null
                     },
                     {
                         "imdbId": null,
@@ -394,7 +408,8 @@ describe("parseList", () => {
                                 "quality": "1080p",
                                 "torrent": "https://yts.re/torrent/download/56EFDC6E48C833C8241A784E93BD5D363553ECB1.torrent"
                             }
-                        ]
+                        ],
+                        "sourceListUrl": null
                     },
                     {
                         "imdbId": null,
@@ -415,7 +430,8 @@ describe("parseList", () => {
                                 "quality": "1080p",
                                 "torrent": "https://yts.re/torrent/download/4EC46EA0BBF26C7B186E9FF49338163B7FCADCAB.torrent"
                             }
-                        ]
+                        ],
+                        "sourceListUrl": null
                     },
                     {
                         "imdbId": null,
@@ -442,7 +458,8 @@ describe("parseList", () => {
                                 "quality": "720p",
                                 "torrent": "https://yts.re/torrent/download/62CA78D3A9E36C4B8CC35FC585621100FBB9D9E6.torrent"
                             }
-                        ]
+                        ],
+                        "sourceListUrl": null
                     },
                     {
                         "imdbId": null,
@@ -469,7 +486,8 @@ describe("parseList", () => {
                                 "quality": "1080p",
                                 "torrent": "https://yts.re/torrent/download/ED8C77F151F1A66D60F63D5C7E8D841DF2B58F42.torrent"
                             }
-                        ]
+                        ],
+                        "sourceListUrl": null
                     },
                     {
                         "imdbId": null,
@@ -490,7 +508,8 @@ describe("parseList", () => {
                                 "quality": "1080p",
                                 "torrent": "https://yts.re/torrent/download/FAEB78A46502DFAF2F650287A4721C81F6BCCFAA.torrent"
                             }
-                        ]
+                        ],
+                        "sourceListUrl": null
                     },
                     {
                         "imdbId": null,
@@ -510,7 +529,8 @@ describe("parseList", () => {
                                 "quality": "720p",
                                 "torrent": "https://yts.re/torrent/download/069D525395DE2C82BCEF8119FE17D74FD62A644C.torrent"
                             }
-                        ]
+                        ],
+                        "sourceListUrl": null
                     }
                 ]
             });

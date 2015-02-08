@@ -2,7 +2,7 @@
     logger: {
         level: "debug"
     },
-    initUrl: "https://yts.re/browse-movie/0/All/All/0/latest/",
+    initUrl: "https://yts.re/browse-movies/0/all/all/0/oldest",
     parseDetailsInParallel: 3
 };
 

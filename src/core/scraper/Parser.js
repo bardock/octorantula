@@ -14,6 +14,7 @@ var Parser = (function () {
                 callback(err);
             logger.debug("List html obtained from url: %s", url, { html: html });
             var list = _this.parseList(html);
+            list.movies.forEach(function (x) { return x.sourceListUrl = url; });
             logger.debug("List parsed from url: %s", url, list);
             callback(null, list);
         });
@@ -32,7 +33,8 @@ var Parser = (function () {
                 rating: {
                     imdb: parseFloat($(this).find(".rating").text())
                 },
-                downloads: []
+                downloads: [],
+                sourceListUrl: null
             };
             $(this).find(".browse-movie-tags a").each(function (i, elem) { return movie.downloads.push({
                 ripper: "yify",

@@ -10,38 +10,69 @@ import Models = require('./Models');
 import Parser = require('./Parser');
 import mongodb = require('mongodb');
 
-logger.info("Starting scraper...");
+logger.info("Connecting to mongo...");
 
 mongodb.MongoClient.connect(config.mongo.connection, function (err, db) {
     if (err) throw err;
 
     logger.debug("Connected to mongo");
 
-    db.collection("movies").ensureIndex({ imdbId: 1 }, { unique: true }, err => {
-        if (err) throw err;
+    var moviesCollection = db.collection("movies");
 
-        var scraper = new Scraper(db);
-
-        scraper.start(err => {
-            scraper.close();
+    moviesCollection
+        .find()
+        .sort({ _id: -1 })
+        .limit(1)
+        .nextObject((err, lastExistingMovie: Models.IMovie) => {
             if (err) throw err;
-        });
-    });
 
+            if (lastExistingMovie == null) {
+
+                logger.debug("Collection is empty");
+
+                moviesCollection.ensureIndex({ imdbId: 1 }, { unique: true }, err => {
+                    if (err) throw err;
+                    logger.debug("Collection's unique index configured");
+
+                    start(db);
+                });
+
+            } else {
+                start(db, lastExistingMovie);
+            }
+        });
 });
+
+function start(db: mongodb.Db, lastExistingMovie?: Models.IMovie) {
+    logger.debug("Starting scraper...", { lastExistingMovie: lastExistingMovie });
+
+    var scraper = new Scraper(db, lastExistingMovie);
+
+    scraper.start(err => {
+        scraper.close();
+        if (err) throw err;
+    });
+}
 
 class Scraper {
 
     private db: mongodb.Db
     private parser: Parser
+    private lastExistingMovie: Models.IMovie
+    private firstPage = true;
 
-    constructor(db: mongodb.Db) {
+    constructor(db: mongodb.Db, lastExistingMovie: Models.IMovie) {
         this.db = db;
         this.parser = new Parser();
+        this.lastExistingMovie = lastExistingMovie;
     }
 
     start(callback: (err?: Error) => void) {
         var url = config.initUrl;
+
+        // continue from last saved movie
+        if (this.lastExistingMovie)
+            url = this.lastExistingMovie.sourceListUrl;
 
         async.whilst(
             /* test: */
@@ -53,7 +84,7 @@ class Scraper {
                 this.parser.parseListByUrl(url,(err, data) => {
                     if (err) return callback(err);
 
-                    this.parseDetails(data,(err, movies) => {
+                    this.parseDetails(data.movies, (err, movies) => {
                         if (err) callback(err);
 
                         // save async
@@ -61,6 +92,7 @@ class Scraper {
                             if (err) callback(err)
                         });
 
+                        this.firstPage = false;
                         url = data.nextUrl;
                         callback();
                     });
@@ -74,9 +106,23 @@ class Scraper {
             });
     }
 
-    private parseDetails(data: Models.IScrapedList, callback: (err: Error, movies?: Models.IMovie[]) => void) {
+    private parseDetails(movies: Models.IMovie[], callback: (err: Error, movies?: Models.IMovie[]) => void) {
+        if (this.firstPage && this.lastExistingMovie) {
+            // remove existing movies
+            var lastMovieFound = false;
+            movies = movies.filter(m => {
+                if (m.name == this.lastExistingMovie.name && m.year == this.lastExistingMovie.year) {
+                    lastMovieFound = true;
+                    return false;
+                }
+                return lastMovieFound;
+            });
+        }
+        if (!movies.length)
+            callback(null, []);
+
         async.map(
-            data.movies,
+            movies,
             (movie, mapped) => {
                 mapped(null, callback => this.parser.parseDetailByUrl(movie.downloads[0].source, movie, callback));
             },
@@ -93,6 +139,11 @@ class Scraper {
     }
 
     private save(movies: Models.IMovie[], callback) {
+        if (!movies.length) {
+            logger.debug("Nothing to save");
+            return callback();
+        }
+
         logger.debug("Saving %s movies...", movies.length);
 
         var col: any = this.db.collection("movies");
@@ -101,11 +152,7 @@ class Scraper {
         var operation = movies.map(m => {
             m.addedOn = date;
             return {
-                replaceOne: {
-                    filter: { imdbId: m.imdbId },
-                    replacement: m,
-                    upsert: true
-                }
+                insertOne: { document: m }
             }
         });
 
