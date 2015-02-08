@@ -1,24 +1,16 @@
-﻿/// <reference path="../typings/should/should.d.ts" />
-
-import logger = require('../logger');
-import should = require('should');
-import fs = require('fs');
-import Models = require('../Models');
-import Scraper = require('../Scraper');
-
+/// <reference path="../typings/should/should.d.ts" />
+var logger = require('../logger');
+var should = require('should');
+var fs = require('fs');
+var Parser = require('../Parser');
 logger.clear();
-
-var scraper = new Scraper();
-
-describe("parseList", () => {
-
-    it("20 items",(done) => {
-        
+var parser = new Parser();
+describe("parseList", function () {
+    it("20 items", function (done) {
         fs.readFile('yify-list.html', 'utf8', function (err, html) {
-            if (err) throw err;
-
-            var data = scraper.parseList(html);
-
+            if (err)
+                throw err;
+            var data = parser.parseList(html);
             should(data).be.eql({
                 "nextUrl": "http:\/\/yts.re\/browse-movie\/0\/All\/All\/0\/latest?page=9",
                 "movies": [
@@ -494,20 +486,16 @@ describe("parseList", () => {
                     }
                 ]
             });
-
             done();
         });
     });
 });
-
-describe("parseDetail",() => {
-
-    it("the interview",(done) => {
-
+describe("parseDetail", function () {
+    it("the interview", function (done) {
         fs.readFile('yify-detail.html', 'utf8', function (err, html) {
-            if (err) throw err;
-
-            var movie: Models.IMovie = <any>{
+            if (err)
+                throw err;
+            var movie = {
                 downloads: [
                     {
                         torrent: "https://yts.re/torrent/download/4A5942DD1BB1DF3D2491B18FF48F627415E1947C.torrent",
@@ -520,8 +508,7 @@ describe("parseDetail",() => {
                 ],
                 rating: { imdb: 7.5 }
             };
-            var data = scraper.parseDetail(html, movie);
-
+            var data = parser.parseDetail(html, movie);
             should(data).be.eql({
                 "downloads": [
                     {
@@ -584,8 +571,8 @@ describe("parseDetail",() => {
                     }
                 ]
             });
-
             done();
         });
     });
 });
+//# sourceMappingURL=ParserTest.js.map

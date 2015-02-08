@@ -1,108 +1,95 @@
-/// <reference path="typings/request/request.d.ts" />
-/// <reference path="typings/cheerio/cheerio.d.ts" />
+/// <reference path="typings/async/async.d.ts" />
+/// <reference path="typings/winston/winston.d.ts" />
+/// <reference path="typings/mongodb/mongodb.d.ts" />
+var async = require('async');
+var config = require('./config');
+require('./config-mongo');
 var logger = require('./logger');
-var request = require('request');
-var cheerio = require('cheerio');
+var Parser = require('./Parser');
+var mongodb = require('mongodb');
+logger.info("Starting scraper...");
+mongodb.MongoClient.connect(config.mongo.connection, function (err, db) {
+    if (err)
+        throw err;
+    logger.debug("Connected to mongo");
+    var sc = new Scraper(db);
+    sc.init();
+});
 var Scraper = (function () {
-    function Scraper() {
+    function Scraper(db) {
+        this.db = db;
+        this.parser = new Parser();
     }
-    Scraper.prototype.scrapeList = function (url, callback) {
+    Scraper.prototype.init = function () {
         var _this = this;
-        logger.info("Requesting list at url: %s", url);
-        request(url, function (err, response, html) {
+        var url = config.initUrl;
+        async.whilst(
+        /* test: */
+        function () {
+            return url;
+        }, 
+        /* iterator: */
+        function (callback) {
+            _this.parser.parseListByUrl(url, function (err, data) {
+                if (err)
+                    return callback(err);
+                _this.parseDetails(data, function (err, movies) {
+                    if (err)
+                        callback(err);
+                    // save async
+                    _this.save(movies, function (err) {
+                        if (err)
+                            callback(err);
+                    });
+                    url = data.nextUrl;
+                    callback();
+                });
+            });
+        }, 
+        /* callback: */
+        function (err) {
+            _this.close();
+            if (err)
+                throw err;
+            logger.info("Done!");
+        });
+    };
+    Scraper.prototype.parseDetails = function (data, callback) {
+        var _this = this;
+        async.map(data.movies, function (movie, mapped) {
+            mapped(null, function (callback) { return _this.parser.parseDetailByUrl(movie.downloads[0].source, movie, callback); });
+        }, function (err, movieDetailParsers) {
             if (err)
                 callback(err);
-            logger.debug("List html obtained from url: %s", url, { html: html });
-            var list = _this.parseList(html);
-            logger.debug("List parsed from url: %s", url, list);
-            callback(null, list);
-        });
-    };
-    Scraper.prototype.parseList = function (html) {
-        var $ = cheerio.load(html);
-        var movies = [];
-        $('.browse-movie-wrap').each(function () {
-            var $link = $(this).find("a.browse-movie-title");
-            var movie = {
-                name: $link.text(),
-                year: parseInt($(this).find(".browse-movie-year").text()),
-                genres: $(this).find("figcaption h4:not(.rating)").map(function (i, x) { return $(x).text(); }).toArray(),
-                poster: $(this).find("img").attr("src"),
-                rating: {
-                    imdb: parseFloat($(this).find(".rating").text())
-                },
-                downloads: []
-            };
-            $(this).find(".browse-movie-tags a").each(function (i, elem) { return movie.downloads.push({
-                ripper: "yify",
-                source: $link.attr("href"),
-                quality: $(elem).text(),
-                torrent: $(elem).attr("href"),
-            }); });
-            movies.push(movie);
-        });
-        return {
-            nextUrl: $('.tsc_pagination a:contains(Next)').attr("href"),
-            movies: movies,
-        };
-    };
-    Scraper.prototype.parseDetailUrl = function (url, movie, callback) {
-        var _this = this;
-        logger.info("Requesting detail at url: %s", url);
-        request(url, function (err, response, html) {
-            if (err)
-                callback(err);
-            logger.debug("Detail html obtained from url: %s", url, { html: html });
-            movie = _this.parseDetail(html, movie);
-            logger.debug("Movie parsed from url: %s", url, movie);
-            callback(null, movie);
-        });
-    };
-    Scraper.prototype.parseDetail = function (html, movie) {
-        var $ = cheerio.load(html);
-        movie.downloads.forEach(function (d) {
-            d.magnetTorrent = $(".modal-download a[href='" + d.torrent + "']").siblings(".download-torrent.magnet").attr("href");
-            var versions = $(".tech-quality").toArray();
-            var versionIndex = versions.indexOf($(".tech-quality:contains(" + d.quality + ")")[0]);
-            var $container = $(".tech-spec-info").eq(versionIndex);
-            d.fileSize = $container.find(".icon-folder").first().parent().text().trim();
-            d.resolution = $container.find(".icon-expand").first().parent().text().trim();
-            d.language = $container.find(".icon-volume-medium").first().parent().text().trim();
-            d.fps = parseFloat($container.find(".icon-film").first().parent().text().trim());
-            var peersAndSeeds = $container.find(".tech-peers-seeds").first().parent().text().replace("P/S", "").trim().split("/");
-            d.peers = parseInt(peersAndSeeds[0]);
-            d.seeds = parseInt(peersAndSeeds[1]);
-        });
-        movie.duration = $(".icon-clock").first().parent().text().trim();
-        var trailer = $(".youtube").attr("href");
-        if (trailer) {
-            if (trailer.indexOf("//") == 0)
-                trailer = "http:" + trailer;
-            movie.trailers = [trailer];
-        }
-        movie.imdbUrl = $("a[title='IMDb Rating']").attr("href");
-        if (!movie.imdbUrl)
-            throw "IMDB url was not found for movie " + movie.name;
-        movie.rottenTomatoesUrl = $("a[href^='http://www.rottentomatoes.com']").attr("href");
-        var rottenTomatoes = {
-            tomatoMeterPerc: parseInt($("span:contains( - Critics)").siblings("span:contains(%)").text()),
-            audiencePerc: parseInt($("span:contains( - Audience)").siblings("span:contains(%)").text())
-        };
-        if (rottenTomatoes.tomatoMeterPerc && rottenTomatoes.audiencePerc)
-            movie.rating.rottenTomatoes = rottenTomatoes;
-        movie.synopsis = $("h3:contains(Synopsis)").next().next().text().trim();
-        movie.directors = $(".directors .name-cast").map(function (i, x) { return $(x).text(); }).toArray();
-        movie.cast = [];
-        $(".actors .name-cast").parent().each(function (i, x) {
-            var actorAndCharacter = $(x).text().split("as");
-            movie.cast.push({
-                actor: actorAndCharacter[0].trim(),
-                character: actorAndCharacter[1].trim()
+            async.parallelLimit(movieDetailParsers, config.parseDetailsInParallel, function (err, movies) {
+                callback(null, movies);
             });
         });
-        return movie;
+    };
+    Scraper.prototype.save = function (movies, callback) {
+        logger.debug("Saving %s movies...", movies.length);
+        var col = this.db.collection("movies");
+        var date = new Date();
+        var operation = movies.map(function (m) {
+            m.addedOn = date;
+            return {
+                replaceOne: {
+                    filter: { name: m.name, year: m.year },
+                    replacement: m,
+                    upsert: true
+                }
+            };
+        });
+        col.bulkWrite(operation, function (err, r) {
+            if (err)
+                callback(err);
+            logger.debug("Movies saved", r);
+            callback();
+        });
+    };
+    Scraper.prototype.close = function () {
+        this.db.close();
     };
     return Scraper;
 })();
-module.exports = Scraper;
 //# sourceMappingURL=Scraper.js.map

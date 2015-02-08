@@ -1,130 +1,113 @@
-﻿/// <reference path="typings/request/request.d.ts" />
-/// <reference path="typings/cheerio/cheerio.d.ts" />
+﻿/// <reference path="typings/async/async.d.ts" />
+/// <reference path="typings/winston/winston.d.ts" />
+/// <reference path="typings/mongodb/mongodb.d.ts" />
 
+import async = require('async');
+var config = require('./config');
+require('./config-mongo');
 import logger = require('./logger');
 import Models = require('./Models');
-import request = require('request');
-import cheerio = require('cheerio');
+import Parser = require('./Parser');
+import mongodb = require('mongodb');
+
+logger.info("Starting scraper...");
+
+mongodb.MongoClient.connect(config.mongo.connection, function (err, db) {
+    if (err) throw err;
+
+    logger.debug("Connected to mongo");
+
+    var sc = new Scraper(db);
+    sc.init();
+});
 
 class Scraper {
 
-    scrapeList(url: string, callback: (err?: Error, data?: Models.IScrapedList) => void) {
-        logger.info("Requesting list at url: %s", url);
+    private db: mongodb.Db
+    private parser: Parser
 
-        request(url,(err, response, html) => {
-            if (err) callback(err);
-
-            logger.debug("List html obtained from url: %s", url, { html: html });
-
-            var list = this.parseList(html);
-            logger.debug("List parsed from url: %s", url, list);
-
-            callback(null, list);
-        });
+    constructor(db: mongodb.Db) {
+        this.db = db;
+        this.parser = new Parser();
     }
 
-    parseList(html: string): Models.IScrapedList {
+    init() {
+        var url = config.initUrl;
 
-        var $ = cheerio.load(html);
+        async.whilst(
+            /* test: */
+            () => { return url; },
 
-        var movies = [];
+            /* iterator: */
+            callback => {
 
-        $('.browse-movie-wrap').each(function () {
-            var $link = $(this).find("a.browse-movie-title");
-            var movie: Models.IMovie = {
-                name: $link.text(),
-                year: parseInt($(this).find(".browse-movie-year").text()),
-                genres: $(this).find("figcaption h4:not(.rating)").map((i, x) => $(x).text()).toArray<string>(),
-                poster: $(this).find("img").attr("src"),
-                rating: {
-                    imdb: parseFloat($(this).find(".rating").text())
-                },
-                downloads: []
-            };
-            $(this).find(".browse-movie-tags a").each((i, elem) => movie.downloads.push({
-                ripper: "yify",
-                source: $link.attr("href"),
-                quality: $(elem).text(),
-                torrent: $(elem).attr("href"),
-            }));
-            movies.push(movie);
-        });
+                this.parser.parseListByUrl(url,(err, data) => {
+                    if (err) return callback(err);
 
-        return {
-            nextUrl: $('.tsc_pagination a:contains(Next)').attr("href"),
-            movies: movies,
-        }
-    }
+                    this.parseDetails(data,(err, movies) => {
+                        if (err) callback(err);
 
-    parseDetailUrl(url: string, movie: Models.IMovie, callback: (err?: Error, movie?: Models.IMovie) => void) {
-        logger.info("Requesting detail at url: %s", url);
+                        // save async
+                        this.save(movies, err => {
+                            if (err) callback(err)
+                        });
 
-        request(url, (err, response, html) => {
-            if (err) callback(err);
-
-            logger.debug("Detail html obtained from url: %s", url, { html: html });
-
-            movie = this.parseDetail(html, movie);
-            logger.debug("Movie parsed from url: %s", url, movie);
-
-            callback(null, movie);
-        });
-    }
-
-    parseDetail(html: string, movie: Models.IMovie): Models.IMovie {
-        var $ = cheerio.load(html);
-
-        movie.downloads.forEach(d => {
-            d.magnetTorrent = $(".modal-download a[href='" + d.torrent + "']").siblings(".download-torrent.magnet").attr("href");
-            var versions = $(".tech-quality").toArray();
-            var versionIndex = versions.indexOf($(".tech-quality:contains(" + d.quality + ")")[0]);
-            var $container = $(".tech-spec-info").eq(versionIndex);
-            d.fileSize = $container.find(".icon-folder").first().parent().text().trim();
-            d.resolution = $container.find(".icon-expand").first().parent().text().trim();
-            d.language = $container.find(".icon-volume-medium").first().parent().text().trim();
-            d.fps = parseFloat($container.find(".icon-film").first().parent().text().trim());
-            var peersAndSeeds = $container.find(".tech-peers-seeds").first().parent().text().replace("P/S", "").trim().split("/");
-            d.peers = parseInt(peersAndSeeds[0]);
-            d.seeds = parseInt(peersAndSeeds[1]);
-        });
-
-        movie.duration = $(".icon-clock").first().parent().text().trim();
-
-        var trailer: string = $(".youtube").attr("href");
-        if (trailer) {
-            if (trailer.indexOf("//") == 0)
-                trailer = "http:" + trailer;
-            movie.trailers = [trailer];
-        }
-
-        movie.imdbUrl = $("a[title='IMDb Rating']").attr("href");
-        if (!movie.imdbUrl)
-            throw "IMDB url was not found for movie " + movie.name;
-
-        movie.rottenTomatoesUrl = $("a[href^='http://www.rottentomatoes.com']").attr("href");
-
-        var rottenTomatoes = {
-            tomatoMeterPerc: parseInt($("span:contains( - Critics)").siblings("span:contains(%)").text()),
-            audiencePerc: parseInt($("span:contains( - Audience)").siblings("span:contains(%)").text())
-        };
-        if (rottenTomatoes.tomatoMeterPerc && rottenTomatoes.audiencePerc)
-            movie.rating.rottenTomatoes = rottenTomatoes;
-
-        movie.synopsis = $("h3:contains(Synopsis)").next().next().text().trim();
-
-        movie.directors = $(".directors .name-cast").map((i, x) => $(x).text()).toArray<string>();
-
-        movie.cast = [];
-        $(".actors .name-cast").parent().each((i, x) => {
-            var actorAndCharacter = $(x).text().split("as");
-            movie.cast.push({
-                actor: actorAndCharacter[0].trim(),
-                character: actorAndCharacter[1].trim()
+                        url = data.nextUrl;
+                        callback();
+                    });
+                });
+            },
+            /* callback: */
+            err => {
+                this.close();
+                if (err) throw err;
+                logger.info("Done!");
             });
+    }
+
+    private parseDetails(data: Models.IScrapedList, callback: (err: Error, movies?: Models.IMovie[]) => void) {
+        async.map(
+            data.movies,
+            (movie, mapped) => {
+                mapped(null, callback => this.parser.parseDetailByUrl(movie.downloads[0].source, movie, callback));
+            },
+            (err, movieDetailParsers) => {
+                if (err) callback(err);
+
+                async.parallelLimit(
+                    movieDetailParsers,
+                    config.parseDetailsInParallel,
+                    (err, movies: Models.IMovie[]) => {
+                        callback(null, movies);
+                    });
+            });
+    }
+
+    private save(movies: Models.IMovie[], callback) {
+        logger.debug("Saving %s movies...", movies.length);
+
+        var col: any = this.db.collection("movies");
+        var date = new Date();
+
+        var operation = movies.map(m => {
+            m.addedOn = date;
+            return {
+                replaceOne: {
+                    filter: { name: m.name, year: m.year },
+                    replacement: m,
+                    upsert: true
+                }
+            }
         });
-        
-        return movie;
+
+        col.bulkWrite(operation,(err, r) => {
+            if (err) callback(err);
+            logger.debug("Movies saved", r);
+            callback();
+        });
+    }
+
+    private close() {
+        this.db.close();
     }
 }
-
-export = Scraper;
