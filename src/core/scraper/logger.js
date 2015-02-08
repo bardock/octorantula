@@ -11,6 +11,7 @@ var logger = new winston.Logger({
         }),
         new (winston.transports.File)({
             level: "debug",
+            handleExceptions: true,
             filename: "logs.log"
         })
     ]
@@ -18,6 +19,7 @@ var logger = new winston.Logger({
 if (config && config.loggly) {
     logger.add(winston.transports.Loggly, {
         level: "debug",
+        handleExceptions: true,
         subdomain: config.loggly.subdomain,
         inputToken: config.loggly.inputToken,
         json: true
