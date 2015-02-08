@@ -31,7 +31,10 @@
     <TypeScriptCompile Include="logger.ts" />
     <TypeScriptCompile Include="Models.ts" />
     <TypeScriptCompile Include="Parser.ts" />
-    <TypeScriptCompile Include="tests\ParserTest.ts">
+    <TypeScriptCompile Include="tests\ParserTestDetail.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="tests\ParserTestList.ts">
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
